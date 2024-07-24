@@ -1,24 +1,17 @@
 import express, { json, urlencoded, type Express } from "express";
 import { container } from "tsyringe";
-import { Environment, Logger } from "@infrastructure/utils";
+import { Environment, Logger } from "src/shared-kernel";
 import { IWebAppOptions } from "./shared/interfaces";
-// import apiRouter from "./routers";
-// import {
-//   ExceptionHandlingMiddleware,
-//   RequestLoggingMiddleware,
-//   ResourceNotFoundMiddleware
-// } from "./middleware";
+import { RequestLoggingMiddleware } from "./middleware";
 
-export default class WebApp {
+export default class Webapp {
   private readonly _app: Express = express();
-  // private readonly _requestLoggingMiddleware = container.resolve(RequestLoggingMiddleware);
-  // private readonly _resourceNotFoundMiddleware = container.resolve(ResourceNotFoundMiddleware);
-  // private readonly _exceptionHandlingMiddleware = container.resolve(ExceptionHandlingMiddleware);
+  private readonly _requestLoggingMiddleware = container.resolve(RequestLoggingMiddleware);
   private readonly _logger: Logger = container.resolve(Logger);
-  private readonly _options: IWebAppOptions = {};
+  private readonly _options: IWebAppOptions;
 
-  constructor(options?: IWebAppOptions) {
-    this._options = options ?? { port: Number(process.env.API_PORT) };
+  constructor(options: IWebAppOptions) {
+    this._options = options;
     this._setup();
   }
 
@@ -38,6 +31,10 @@ export default class WebApp {
   public run(): void {
     const { port } = this._options;
 
+    if (port === undefined) {
+      throw new Error("Webapp option 'port' not set");
+    }
+
     this._app.listen(port, () => {
       this._logger.logInfo(`Server running on port: ${port}.`);
       if (Environment.isDevelopment) {
@@ -49,12 +46,6 @@ export default class WebApp {
   private _setup(): void {
     this._app.use(json());
     this._app.use(urlencoded({ extended: true }));
-    // this._app.use(this._requestLoggingMiddleware!.execute);
-
-    // Register application router
-    // this._app.use("/api/v1", apiRouter);
-
-    // this._app.use(this._resourceNotFoundMiddleware!.execute);
-    // this._app.use(this._exceptionHandlingMiddleware.execute);
+    this._app.use(this._requestLoggingMiddleware!.execute);
   }
 }
