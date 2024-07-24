@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import "dotenv/config";
 import "express-async-errors";
+import "./dependency-injection";
 import Webapp from "./webapp";
 
 async function startUp() {

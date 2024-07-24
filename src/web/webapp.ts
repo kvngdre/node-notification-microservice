@@ -1,8 +1,9 @@
 import express, { json, urlencoded, type Express } from "express";
 import { container } from "tsyringe";
-import { Environment, Logger } from "src/shared-kernel";
+import { Environment } from "src/shared-kernel";
 import { IWebAppOptions } from "./shared/interfaces";
 import { RequestLoggingMiddleware } from "./middleware";
+import { Logger } from "@infrastructure/logger/logger";
 
 export default class Webapp {
   private readonly _app: Express = express();
