@@ -47,6 +47,7 @@ export default class Webapp {
 
     this._app.listen(port, () => {
       this._logger.logInfo(`Server running on port: [${port}]`);
+
       if (Environment.isDevelopment) {
         this._logger.logInfo(`http://localhost:${port}/api/v1/health`);
       }

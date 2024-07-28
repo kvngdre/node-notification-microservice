@@ -2,17 +2,17 @@
   "name": "notification-microservice",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/src/web/index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "build": "rimraf ./dist && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
-    "dev": "nodemon -r tsconfig-paths/register src/web/server.ts",
+    "dev": "nodemon -r tsconfig-paths/register src/web/index.ts",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "lint": "eslint --ext .ts,.js .",
     "prepare": "husky install",
-    "start": "node dist/src/web/server.js",
+    "start": "node dist/src/web/index.js",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"

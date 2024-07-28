@@ -1,8 +1,12 @@
-import { container } from "tsyringe";
-import { RequestLoggingMiddleware, ResourceNotFoundMiddleware } from "./middleware";
-import { AbstractMiddleware } from "./abstractions/types";
+import { container, Lifecycle } from "tsyringe";
+import {
+  ErrorHandlingMiddleware,
+  RequestLoggingMiddleware,
+  ResourceNotFoundMiddleware
+} from "./middleware";
+import { AbstractErrorMiddleware, AbstractMiddleware } from "./abstractions/types";
 import { registerInfrastructureServices } from "@infrastructure/infrastructure-dependency-injection";
-import { GlobalErrorHandler } from "./global-error-handler";
+import { GlobalErrorHandler } from "./infrastructure/global-error-handler";
 
 export function registerServices() {
   registerInfrastructureServices();
@@ -15,6 +19,9 @@ export function registerServices() {
     "ResourceNotFoundMiddleware",
     ResourceNotFoundMiddleware
   );
+  container.register<AbstractErrorMiddleware>("ErrorHandlingMiddleware", ErrorHandlingMiddleware, {
+    lifecycle: Lifecycle.ResolutionScoped
+  });
   container.registerSingleton("GlobalErrorHandler", GlobalErrorHandler);
 }
 
