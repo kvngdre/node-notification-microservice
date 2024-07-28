@@ -19,6 +19,8 @@ export default class Webapp {
   private readonly _options: IWebAppOptions;
 
   constructor(options: IWebAppOptions) {
+    this._parsePortNumberOrThrow(options.port);
+
     this._options = options;
     this._setup();
   }
@@ -33,15 +35,15 @@ export default class Webapp {
    * @param value The value of the option.
    */
   public setOption<K extends keyof IWebAppOptions>(key: K, value: IWebAppOptions[K]): void {
+    if (key === "port") {
+      this._parsePortNumberOrThrow(value as string | number);
+    }
+
     this._options[key] = value;
   }
 
   public run(): void {
-    const { port } = this._options;
-
-    if (port === undefined) {
-      throw new Error("Webapp option 'port' not set");
-    }
+    const port = this._options.port;
 
     this._app.listen(port, () => {
       this._logger.logInfo(`Server running on port: [${port}]`);
@@ -60,5 +62,13 @@ export default class Webapp {
 
     this._app.use(this._resourceNotFoundMiddleware.execute);
     this._app.use(this._errorHandlingMiddleware.execute);
+  }
+
+  private _parsePortNumberOrThrow(value: number | string) {
+    const result = Number.parseInt(value as string);
+
+    if (isNaN(result)) {
+      throw new Error("Server port number is invalid or not set.");
+    }
   }
 }

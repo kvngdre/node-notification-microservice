@@ -1,5 +1,5 @@
 export interface IWebAppOptions {
-  port: number;
+  port: number | string;
   cors?: {
     allowedOrigins: string | string[];
     methods: string | string[];

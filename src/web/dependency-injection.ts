@@ -4,7 +4,7 @@ import { AbstractMiddleware } from "./abstractions/types";
 import { registerInfrastructureServices } from "@infrastructure/infrastructure-dependency-injection";
 import { GlobalErrorHandler } from "./global-error-handler";
 
-export function dependencyInjection() {
+export function registerServices() {
   registerInfrastructureServices();
 
   container.registerSingleton<AbstractMiddleware>(
@@ -18,4 +18,4 @@ export function dependencyInjection() {
   container.registerSingleton("GlobalErrorHandler", GlobalErrorHandler);
 }
 
-dependencyInjection();
+registerServices();

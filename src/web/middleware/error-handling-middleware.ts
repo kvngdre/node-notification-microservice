@@ -15,7 +15,7 @@ export class ErrorHandlingMiddleware extends AbstractErrorMiddleware {
     // Handle JSON syntax errors in payload.
     if (err instanceof SyntaxError && "body" in err) {
       const exception = new ValidationException(
-        "Validation.PayloadMalformed",
+        "Validation.MalformedJSON",
         "An error occurred while parsing request JSON payload."
       );
 

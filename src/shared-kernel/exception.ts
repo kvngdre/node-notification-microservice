@@ -27,7 +27,7 @@ export class Exception {
     return new Exception(ExceptionType.Unauthorized, code, description);
   }
 
-  public static Unexpected() {
+  public static get Unexpected() {
     return new Exception(ExceptionType.Unexpected, "General.Unexpected", "Something went wrong");
   }
 }
