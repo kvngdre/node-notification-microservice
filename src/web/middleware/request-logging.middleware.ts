@@ -2,8 +2,8 @@ import { type NextFunction, type Request, type Response } from "express";
 import morgan, { token } from "morgan";
 import { inject, singleton } from "tsyringe";
 import { AbstractMiddleware } from "@web/abstractions/types/abstract-middleware.shared";
-import { ILogger } from "@shared-kernel/interfaces/logger-interface";
 import { Environment } from "src/shared-kernel";
+import { ILogger } from "@application/abstractions/logging/logger-interface";
 
 @singleton()
 export class RequestLoggingMiddleware extends AbstractMiddleware {

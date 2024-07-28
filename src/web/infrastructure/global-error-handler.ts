@@ -1,5 +1,5 @@
 import { singleton } from "tsyringe";
-import { Logger } from "@infrastructure/logger";
+import { Logger } from "@infrastructure/logging";
 
 @singleton()
 export class GlobalErrorHandler {

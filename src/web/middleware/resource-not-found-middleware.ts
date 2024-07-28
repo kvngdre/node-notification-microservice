@@ -7,7 +7,6 @@ import { ApiResponse } from "@web/infrastructure/api-response";
 @singleton()
 export class ResourceNotFoundMiddleware extends AbstractMiddleware {
   public execute(req: Request, res: Response, next: NextFunction): void | Promise<void> {
-    throw new Error("Testing");
     const exception = Exception.NotFound(
       "General.ResourceNotFound",
       `The request resource at '${req.originalUrl}' could not be located.`

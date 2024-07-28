@@ -7,7 +7,7 @@ import {
   RequestLoggingMiddleware,
   ResourceNotFoundMiddleware
 } from "./middleware";
-import { Logger } from "@infrastructure/logger/logger";
+import { Logger } from "@infrastructure/logging/logger";
 import { apiRouter } from "./routers/api-router";
 
 export default class Webapp {

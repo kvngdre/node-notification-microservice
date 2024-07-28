@@ -1,6 +1,6 @@
 import { container } from "tsyringe";
-import { Logger } from "./logger";
-import { ILogger } from "@shared-kernel/interfaces/logger-interface";
+import { Logger } from "./logging";
+import { ILogger } from "@application/abstractions/logging/logger-interface";
 
 export function registerInfrastructureServices() {
   container.registerSingleton<ILogger>("Logger", Logger);
