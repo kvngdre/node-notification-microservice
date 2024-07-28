@@ -1,0 +1,11 @@
+{
+  "execMap": {
+    "ts": "ts-node --transpileOnly"
+  },
+  "watch": ["*.js", "*.ts", "*.json", "*.yaml"],
+  "ignore": ["node_modules", "coverage", "dist"],
+  "restartable": "rs",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}

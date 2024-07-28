@@ -1,6 +1,6 @@
 import { container } from "tsyringe";
-import { RequestLoggingMiddleware } from "./middleware";
-import { AbstractMiddleware } from "./shared/types";
+import { RequestLoggingMiddleware, ResourceNotFoundMiddleware } from "./middleware";
+import { AbstractMiddleware } from "./abstractions/types";
 import { registerInfrastructureServices } from "@infrastructure/infrastructure-dependency-injection";
 
 export function dependencyInjection() {
@@ -9,6 +9,10 @@ export function dependencyInjection() {
   container.registerSingleton<AbstractMiddleware>(
     "RequestLoggingMiddleware",
     RequestLoggingMiddleware
+  );
+  container.registerSingleton<AbstractMiddleware>(
+    "ResourceNotFoundMiddleware",
+    ResourceNotFoundMiddleware
   );
 }
 

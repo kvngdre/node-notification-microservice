@@ -1,8 +1,8 @@
 import winston, { transports, createLogger, format, addColors } from "winston";
-import "winston-daily-rotate-file";
 import { singleton } from "tsyringe";
-import { ILogger } from "@application/shared/interfaces/utils";
-import { Environment } from "../../shared-kernel/environment";
+import "winston-daily-rotate-file";
+import { ILogger } from "@shared-kernel/interfaces/logger-interface";
+import { Environment } from "@shared-kernel/environment";
 
 @singleton()
 export class Logger implements ILogger {
