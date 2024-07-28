@@ -2,7 +2,11 @@ import express, { json, urlencoded, type Express } from "express";
 import { container } from "tsyringe";
 import { Environment } from "src/shared-kernel";
 import { IWebAppOptions } from "./abstractions/interfaces";
-import { RequestLoggingMiddleware, ResourceNotFoundMiddleware } from "./middleware";
+import {
+  ErrorHandlingMiddleware,
+  RequestLoggingMiddleware,
+  ResourceNotFoundMiddleware
+} from "./middleware";
 import { Logger } from "@infrastructure/logger/logger";
 import { apiRouter } from "./routers/api-router";
 
@@ -10,6 +14,7 @@ export default class Webapp {
   private readonly _app: Express = express();
   private readonly _requestLoggingMiddleware = container.resolve(RequestLoggingMiddleware);
   private readonly _resourceNotFoundMiddleware = container.resolve(ResourceNotFoundMiddleware);
+  private readonly _errorHandlingMiddleware = container.resolve(ErrorHandlingMiddleware);
   private readonly _logger: Logger = container.resolve(Logger);
   private readonly _options: IWebAppOptions;
 
@@ -54,5 +59,6 @@ export default class Webapp {
     this._app.use("/api/v1", apiRouter);
 
     this._app.use(this._resourceNotFoundMiddleware.execute);
+    this._app.use(this._errorHandlingMiddleware.execute);
   }
 }
