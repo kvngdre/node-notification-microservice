@@ -17,6 +17,8 @@ export function registerServices() {
     lifecycle: Lifecycle.ResolutionScoped
   });
   container.registerSingleton("GlobalErrorHandler", GlobalErrorHandler);
+
+  console.log("Service registration complete...");
 }
 
-registerServices();
+// registerServices();

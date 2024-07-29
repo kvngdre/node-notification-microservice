@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from "express";
-import { Lifecycle, scoped } from "tsyringe";
+import { inject, Lifecycle, scoped } from "tsyringe";
 import { AbstractErrorMiddleware } from "@web/abstractions/types/abstract-error-middleware.shared";
 import { ApiResponse } from "@web/infrastructure/api-response";
 import { GlobalErrorHandler } from "@web/infrastructure/global-error-handler";

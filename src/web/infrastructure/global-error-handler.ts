@@ -1,5 +1,5 @@
 import { singleton } from "tsyringe";
-import { Logger } from "@infrastructure/logging";
+import { Logger } from "@infrastructure/logging/logger";
 
 @singleton()
 export class GlobalErrorHandler {
@@ -9,20 +9,22 @@ export class GlobalErrorHandler {
 
   public async registerProcessListeners() {
     process.on("unhandledRejection", (reason) => {
-      this._logger.logDebug("===unhandledRejection====");
+      this._logger.logDebug("===unhandledRejection===");
       throw reason;
     });
 
     process.on("uncaughtException", async (error) => {
-      this._logger.logDebug("===uncaughtException====");
+      this._logger.logDebug("===uncaughtException===");
       await this.handle(error);
     });
 
     GlobalErrorHandler.isRegistered = true;
+
+    console.log("Listeners registered...");
   }
 
   public async handle(error: Error): Promise<void> {
-    if (!GlobalErrorHandler.isRegistered) {
+    if (GlobalErrorHandler.isRegistered === false) {
       this.registerProcessListeners();
     }
 
