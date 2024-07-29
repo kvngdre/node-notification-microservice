@@ -1,4 +1,4 @@
-import { inject, Lifecycle, scoped } from "tsyringe";
+import { Lifecycle, scoped } from "tsyringe";
 import { IRequestHandler } from "@application/abstractions/messaging";
 import { CreateNotificationCommand } from "./create-notification-command";
 import { NotificationResponse } from "@application/notification/notification-response";

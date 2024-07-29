@@ -1,6 +1,6 @@
 import { Mediator } from "@shared-kernel/mediator";
 import { ResultType } from "@shared-kernel/result";
-import { ApiResponse, ApiResponseType } from "@web/infrastructure/api-response";
+import { ApiResponse } from "@web/infrastructure/api-response";
 import { HttpStatus } from "@web/infrastructure/http-status";
 
 export abstract class BaseController {

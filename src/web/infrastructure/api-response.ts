@@ -41,19 +41,19 @@ export class ApiResponse<TData, TSuccess extends boolean> {
   }
 }
 
-// export type ApiResponseType<TData> = ISuccessApiResponse<TData> | IFailureApiResponse;
 export type ApiResponseType<TData> = ApiResponse<TData, true> | ApiResponse<never, false>;
+// export type ApiResponseType<TData> = ISuccessApiResponse<TData> | IFailureApiResponse;
 
-interface ISuccessApiResponse<TData> {
-  success: true;
-  message: string;
-  data: TData | undefined;
-  exception: never;
-}
+// interface ISuccessApiResponse<TData> {
+//   success: true;
+//   message: string;
+//   data: TData | undefined;
+//   exception: never;
+// }
 
-interface IFailureApiResponse {
-  success: false;
-  message: never;
-  data: never;
-  exception: Exception;
-}
+// interface IFailureApiResponse {
+//   success: false;
+//   message: never;
+//   data: never;
+//   exception: Exception;
+// }
