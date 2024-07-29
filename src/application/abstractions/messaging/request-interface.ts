@@ -1,1 +1,1 @@
-export interface IRequest<out TResult> {}
+export abstract class IRequest<TValue = unknown> {}

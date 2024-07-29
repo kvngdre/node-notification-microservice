@@ -1,15 +1,11 @@
 import { Exception } from "./exception";
 
-type MessageType<T> = T extends true ? string : never;
-type ExceptionType<T> = T extends true ? never : Exception;
-type ValueType<T, U> = T extends true ? U : never;
-
 export class Result<TValue> {
   private constructor(
     private readonly _isSuccess: boolean,
-    private readonly _message: string | never,
-    private readonly _value: (TValue | undefined) | never,
-    private readonly _exception: Exception | never
+    private readonly _message?: string,
+    private readonly _value?: TValue,
+    private readonly _exception?: Exception
   ) {}
 
   public get isSuccess(): boolean {
@@ -44,12 +40,12 @@ export class Result<TValue> {
     return this._exception;
   }
 
-  public static success<TValue>(message: string, value: TValue | undefined) {
-    return new Result(true, message, value, undefined as never);
+  public static success<TValue = undefined>(message: string, value: TValue) {
+    return new Result(true, message, value) as unknown as ISuccessResult<TValue>;
   }
 
-  public static failure<TException extends Exception>(exception: TException) {
-    return new Result(false, undefined as never, undefined as never, exception);
+  public static failure(exception: Exception) {
+    return new Result(false, undefined, undefined, exception) as unknown as IFailureResult;
   }
 }
 
@@ -63,20 +59,20 @@ res.isSuccess;
 res.message;
 res.value;
 
-export type ResultType<TValue = unknown> = ISuccessResult<TValue> | IFailureResult;
+export type ResultType<TValue> = ISuccessResult<TValue> | IFailureResult;
 
 interface ISuccessResult<TValue> {
   get isSuccess(): true;
   get isFailure(): false;
   get message(): string;
-  get value(): TValue;
+  get value(): TValue | undefined | never;
   get exception(): never;
 }
 
-interface IFailureResult<TValue extends never = never> {
+interface IFailureResult {
   get isSuccess(): false;
   get isFailure(): true;
   get message(): never;
-  get value(): TValue;
+  get value(): never;
   get exception(): Exception;
 }

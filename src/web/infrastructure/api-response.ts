@@ -2,7 +2,9 @@ import { Exception } from "@shared-kernel/exception";
 
 type MessageType<T extends boolean> = T extends true ? string : never;
 type DataType<T extends boolean, TData> = T extends true ? TData : never;
-type ErrorType<T extends boolean> = T extends true ? never : Exception;
+type ErrorType<T extends boolean> = T extends true
+  ? never
+  : Omit<Exception, "exceptionType"> & { errorType: string };
 
 /**
  * Represents the response payload for HTTP requests.
@@ -12,7 +14,7 @@ export class ApiResponse<TData, TSuccess extends boolean> {
     public readonly success: TSuccess,
     public readonly message: MessageType<TSuccess>,
     public readonly data: DataType<TSuccess, TData>,
-    public readonly exception: ErrorType<TSuccess>
+    public readonly error: ErrorType<TSuccess>
   ) {}
 
   /**
@@ -31,7 +33,11 @@ export class ApiResponse<TData, TSuccess extends boolean> {
    * @returns An instance of ApiResponse with failure status.
    */
   public static failure(exception: Exception) {
-    return new ApiResponse(false, undefined as never, undefined as never, exception);
+    return new ApiResponse(false, undefined as never, undefined as never, {
+      errorType: exception.exceptionType,
+      code: exception.code,
+      description: exception.description
+    });
   }
 }
 

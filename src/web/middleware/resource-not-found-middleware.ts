@@ -9,7 +9,7 @@ export class ResourceNotFoundMiddleware extends AbstractMiddleware {
   public execute(req: Request, res: Response, next: NextFunction): void | Promise<void> {
     const exception = Exception.NotFound(
       "General.ResourceNotFound",
-      `The request resource at '${req.originalUrl}' could not be located.`
+      `The requested resource at '${req.method} ${req.originalUrl}' not found.`
     );
 
     res.status(404).json(ApiResponse.failure(exception));
