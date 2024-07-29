@@ -1,13 +1,14 @@
-import { Mediator } from "@shared-kernel/mediator";
+import { container } from "tsyringe";
+import { Mediator } from "@infrastructure/mediator/mediator";
 import { ResultType } from "@shared-kernel/result";
 import { ApiResponse } from "@web/infrastructure/api-response";
 import { HttpStatus } from "@web/infrastructure/http-status";
 
 export abstract class BaseController {
-  protected readonly mediator = new Mediator();
+  protected readonly mediator = container.resolve(Mediator);
 
   constructor() {
-    this.mediator.registerHandlers();
+    // this.mediator.registerHandlers();
   }
 
   protected buildHttpResponse<TValue, TS extends boolean>(result: ResultType<TValue>) {

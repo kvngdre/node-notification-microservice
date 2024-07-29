@@ -51,13 +51,6 @@ export class Result<TValue> {
 
 // const res = new Result(true, "", undefined, undefined as never);
 // const res = Result.success("", 2);
-const res = Result.failure(Exception.Unexpected);
-
-res.exception;
-res.isFailure;
-res.isSuccess;
-res.message;
-res.value;
 
 export type ResultType<TValue> = ISuccessResult<TValue> | IFailureResult;
 

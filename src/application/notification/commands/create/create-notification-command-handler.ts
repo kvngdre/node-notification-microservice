@@ -3,7 +3,12 @@ import { IRequestHandler } from "@application/abstractions/messaging";
 import { CreateNotificationCommand } from "./create-notification-command";
 import { NotificationResponse } from "@application/notification/notification-response";
 import { Result, ResultType } from "@shared-kernel/result";
-import { INotificationRepository, Notification, NotificationChannel } from "@domain/notification";
+import {
+  INotificationRepository,
+  Notification,
+  NotificationChannel,
+  NotificationStatus
+} from "@domain/notification";
 import { AbstractValidator } from "@shared-kernel/abstract-validator";
 
 @scoped(Lifecycle.ResolutionScoped)
@@ -18,6 +23,8 @@ export class CreateNotificationCommandHandler extends IRequestHandler<
     private readonly _createNotificationCommandValidator: AbstractValidator<CreateNotificationCommand>
   ) {
     super();
+
+    // this.mediator.registerHandler("CreateNotificationCommand", this);
   }
 
   public async handle(
@@ -33,7 +40,7 @@ export class CreateNotificationCommandHandler extends IRequestHandler<
     const notification = new Notification(
       value.channel as NotificationChannel,
       value.data,
-      value.status,
+      value.status as NotificationStatus,
       value.retryCount
     );
 

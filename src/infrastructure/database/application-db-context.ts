@@ -22,7 +22,6 @@ export class ApplicationDbContext {
       connectTimeoutMS: Environment.isDevelopment ? 10_000 : 60_000,
       entities: ["**src/**/*-entity.{ts,js}"],
       migrations: ["**/migrations/*.{ts,js}"],
-      logging: Environment.isDevelopment || Environment.isTest,
       synchronize: Environment.isDevelopment || Environment.isTest
     });
   }

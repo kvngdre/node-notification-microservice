@@ -13,7 +13,12 @@ export class NotificationsController extends BaseController {
     req: Request<object, object, CreateNotificationRequest>,
     res: Response
   ) => {
-    const command = new CreateNotificationCommand(req.body.channel, req.body.data);
+    const command = new CreateNotificationCommand(
+      req.body.channel,
+      req.body.data,
+      req.body.retryCount,
+      req.body.status
+    );
 
     const result = await this.mediator.send<NotificationResponse>(command);
 

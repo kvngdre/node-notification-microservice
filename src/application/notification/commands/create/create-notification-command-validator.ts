@@ -10,7 +10,9 @@ export class CreateNotificationCommandValidator extends AbstractValidator<Create
     request: CreateNotificationCommand
   ): ValidationResultType<CreateNotificationCommand> {
     const schema = z.object({
-      channel: z.nativeEnum(NotificationChannel),
+      channel: z.nativeEnum(NotificationChannel, {
+        message: "Invalid channel. Expected  one of {'email' | 'sms' | 'push'}."
+      }),
       data: z.string().trim().min(1).max(1086),
       retryCount: z.number().min(0).max(3).optional(),
       status: z.nativeEnum(NotificationStatus).optional()
