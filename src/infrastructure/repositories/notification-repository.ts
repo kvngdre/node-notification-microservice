@@ -1,19 +1,27 @@
+import { Lifecycle, scoped } from "tsyringe";
 import { INotificationRepository, Notification } from "@domain/notification";
+import { ApplicationDbContext } from "@infrastructure/database/application-db-context";
 
+@scoped(Lifecycle.ResolutionScoped)
 export class NotificationRepository implements INotificationRepository {
-  public async insert(notification: Notification): Promise<Notification> {
-    throw new Error("Method not implemented.");
+  constructor(private readonly _dbContext: ApplicationDbContext) {}
+
+  public async save(notification: Notification): Promise<Notification> {
+    return this._dbContext.notifications.save(notification);
   }
-  find(query: object): Promise<Array<Notification>> {
-    throw new Error("Method not implemented.");
+
+  public async find(query: object): Promise<Array<Notification>> {
+    return this._dbContext.notifications
+      .createQueryBuilder("notification")
+      .orderBy({ created_at: "DESC" })
+      .getMany();
   }
-  findById(id: string): Promise<Notification | null> {
-    throw new Error("Method not implemented.");
+
+  public async findById(id: string): Promise<Notification | null> {
+    return this._dbContext.notifications.findOneBy({ id });
   }
-  update(notification: Notification): Promise<Notification> {
-    throw new Error("Method not implemented.");
-  }
-  remove(notification: Notification): Promise<Notification | null> {
-    throw new Error("Method not implemented.");
+
+  public async remove(notification: Notification): Promise<Notification | null> {
+    return this._dbContext.notifications.remove(notification);
   }
 }
