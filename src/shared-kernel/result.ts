@@ -4,20 +4,20 @@ type MessageType<T> = T extends true ? string : never;
 type ExceptionType<T> = T extends true ? never : Exception;
 type ValueType<T, U> = T extends true ? U : never;
 
-export class Result<TSuccess extends boolean, TValue> {
-  constructor(
-    private readonly _isSuccess: TSuccess,
-    private readonly _message: MessageType<TSuccess>,
-    private readonly _value: ValueType<TSuccess, TValue>,
-    private readonly _exception: ExceptionType<TSuccess>
+export class Result<TValue> {
+  private constructor(
+    private readonly _isSuccess: boolean,
+    private readonly _message: string | never,
+    private readonly _value: (TValue | undefined) | never,
+    private readonly _exception: Exception | never
   ) {}
 
-  public get isSuccess() {
+  public get isSuccess(): boolean {
     return this._isSuccess;
   }
 
-  public get isFailure(): TSuccess extends true ? false : true {
-    return !this._isSuccess as TSuccess extends true ? false : true;
+  public get isFailure() {
+    return !this._isSuccess;
   }
 
   public get message() {
@@ -44,11 +44,11 @@ export class Result<TSuccess extends boolean, TValue> {
     return this._exception;
   }
 
-  public static success<TValue>(message: string, value?: TValue) {
+  public static success<TValue>(message: string, value: TValue | undefined) {
     return new Result(true, message, value, undefined as never);
   }
 
-  public static failure(exception: Exception) {
+  public static failure<TException extends Exception>(exception: TException) {
     return new Result(false, undefined as never, undefined as never, exception);
   }
 }
@@ -63,20 +63,20 @@ res.isSuccess;
 res.message;
 res.value;
 
-// export type ResultType<TValue = unknown> = ISuccessResult<TValue> | IFailureResult;
+export type ResultType<TValue = unknown> = ISuccessResult<TValue> | IFailureResult;
 
-// interface ISuccessResult<TValue> {
-//   get isSuccess(): true;
-//   get isFailure(): false;
-//   get message(): string;
-//   get value(): TValue | undefined;
-//   get exception(): never;
-// }
+interface ISuccessResult<TValue> {
+  get isSuccess(): true;
+  get isFailure(): false;
+  get message(): string;
+  get value(): TValue;
+  get exception(): never;
+}
 
-// interface IFailureResult {
-//   get isSuccess(): false;
-//   get isFailure(): true;
-//   get message(): never;
-//   get value(): never;
-//   get exception(): Exception;
-// }
+interface IFailureResult<TValue extends never = never> {
+  get isSuccess(): false;
+  get isFailure(): true;
+  get message(): never;
+  get value(): TValue;
+  get exception(): Exception;
+}

@@ -7,12 +7,12 @@ type ErrorType<T extends boolean> = T extends true ? never : Exception;
 /**
  * Represents the response payload for HTTP requests.
  */
-export class ApiResponse<TSuccess extends boolean, TData> {
+export class ApiResponse<TData, TSuccess extends boolean> {
   private constructor(
     public readonly success: TSuccess,
     public readonly message: MessageType<TSuccess>,
     public readonly data: DataType<TSuccess, TData>,
-    public readonly error: ErrorType<TSuccess>
+    public readonly exception: ErrorType<TSuccess>
   ) {}
 
   /**
@@ -21,7 +21,7 @@ export class ApiResponse<TSuccess extends boolean, TData> {
    * @param data - The data to include in the payload.
    * @returns An instance of ApiResponse with success status.
    */
-  public static success<T>(message: string, data?: T) {
+  public static success<T>(message: string, data: T | undefined) {
     return new ApiResponse(true, message, data, undefined as never);
   }
 
@@ -33,4 +33,21 @@ export class ApiResponse<TSuccess extends boolean, TData> {
   public static failure(exception: Exception) {
     return new ApiResponse(false, undefined as never, undefined as never, exception);
   }
+}
+
+// export type ApiResponseType<TData> = ISuccessApiResponse<TData> | IFailureApiResponse;
+export type ApiResponseType<TData> = ApiResponse<TData, true> | ApiResponse<never, false>;
+
+interface ISuccessApiResponse<TData> {
+  success: true;
+  message: string;
+  data: TData | undefined;
+  exception: never;
+}
+
+interface IFailureApiResponse {
+  success: false;
+  message: never;
+  data: never;
+  exception: Exception;
 }

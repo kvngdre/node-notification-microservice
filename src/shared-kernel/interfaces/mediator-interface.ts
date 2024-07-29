@@ -1,5 +1,6 @@
 import { IRequest } from "@application/abstractions/messaging";
+import { Result } from "@shared-kernel/result";
 
 export interface IMediator {
-  send<TResult>(request: IRequest<TResult>): Promise<TResult>;
+  send<TValue>(request: IRequest<TValue>): Promise<Result<TValue>>;
 }
