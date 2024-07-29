@@ -7,5 +7,9 @@ import { Mediator } from "@shared-kernel/mediator";
 export abstract class IRequestHandler<TRequest extends IRequest, TResult> {
   protected mediator: IMediator = container.resolve(Mediator);
 
+  constructor() {
+    this.handle.bind(this);
+  }
+
   abstract handle(request: TRequest): Promise<ResultType<TResult>>;
 }

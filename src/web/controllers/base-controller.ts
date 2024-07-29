@@ -6,6 +6,10 @@ import { HttpStatus } from "@web/infrastructure/http-status";
 export abstract class BaseController {
   protected readonly mediator = new Mediator();
 
+  constructor() {
+    this.mediator.registerHandlers();
+  }
+
   protected buildHttpResponse<TValue, TS extends boolean>(result: ResultType<TValue>) {
     const code = result.isSuccess
       ? HttpStatus.OK

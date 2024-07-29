@@ -11,14 +11,8 @@ import { GlobalErrorHandler } from "./infrastructure/global-error-handler";
 export function registerServices() {
   registerInfrastructureServices();
 
-  container.registerSingleton<AbstractMiddleware>(
-    "RequestLoggingMiddleware",
-    RequestLoggingMiddleware
-  );
-  container.registerSingleton<AbstractMiddleware>(
-    "ResourceNotFoundMiddleware",
-    ResourceNotFoundMiddleware
-  );
+  container.registerSingleton<AbstractMiddleware>(RequestLoggingMiddleware);
+  container.registerSingleton<AbstractMiddleware>(ResourceNotFoundMiddleware);
   container.register<AbstractErrorMiddleware>("ErrorHandlingMiddleware", ErrorHandlingMiddleware, {
     lifecycle: Lifecycle.ResolutionScoped
   });

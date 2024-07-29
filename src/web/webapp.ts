@@ -11,12 +11,12 @@ import { Logger } from "@infrastructure/logging/logger";
 import { apiRouter } from "./routers/api-router";
 
 export default class Webapp {
+  private readonly _options: IWebAppOptions;
   private readonly _app: Express = express();
   private readonly _requestLoggingMiddleware = container.resolve(RequestLoggingMiddleware);
   private readonly _resourceNotFoundMiddleware = container.resolve(ResourceNotFoundMiddleware);
   private readonly _errorHandlingMiddleware = container.resolve(ErrorHandlingMiddleware);
   private readonly _logger: Logger = container.resolve(Logger);
-  private readonly _options: IWebAppOptions;
 
   constructor(options: IWebAppOptions) {
     this._parsePortNumberOrThrow(options.port);

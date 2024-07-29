@@ -1,4 +1,5 @@
 import { type Request, type Response } from "express";
+import { Lifecycle, scoped } from "tsyringe";
 import {
   CreateNotificationCommand,
   CreateNotificationRequest
@@ -6,6 +7,7 @@ import {
 import { BaseController } from "./base-controller";
 import { NotificationResponse } from "@application/notification/notification-response";
 
+@scoped(Lifecycle.ResolutionScoped)
 export class NotificationsController extends BaseController {
   public createNotification = async (
     req: Request<object, object, CreateNotificationRequest>,
