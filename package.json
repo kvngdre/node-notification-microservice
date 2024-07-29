@@ -11,13 +11,16 @@
     "dev": "nodemon -r tsconfig-paths/register src/web/index.ts",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "lint": "eslint --ext .ts,.js .",
+    "migration:create": "npx ts-node ./src/infrastructure/database/scripts/create-migration-file-script.ts",
     "prepare": "husky install",
     "start": "node dist/src/web/index.js",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
-  "keywords": [],
+  "keywords": [
+    "microservice"
+  ],
   "author": "John Kennedy Kalu",
   "license": "ISC",
   "dependencies": {

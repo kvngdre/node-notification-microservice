@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { singleton } from "tsyringe";
-import { Notification } from "@domain/notification/notification";
+import { Notification } from "@domain/notification/notification-entity";
 import { Environment } from "@shared-kernel/environment";
 import { Logger } from "@infrastructure/logging/logger";
 
@@ -16,35 +16,27 @@ export class ApplicationDbContext {
       throw new Error("No database connection URI provided");
     }
 
-    this._dataSource = new DataSource({
+    ApplicationDbContext.dataSource = new DataSource({
       type: "postgres",
       url: connectionURI,
-      entities: [Notification],
       connectTimeoutMS: Environment.isDevelopment ? 10_000 : 60_000,
-      logging: Environment.isDevelopment || Environment.isTest
-      //   synchronize: Environment.isDevelopment || Environment.isTest
+      entities: ["**src/**/*-entity.{ts,js}"],
+      migrations: ["**/migrations/*.{ts,js}"],
+      logging: Environment.isDevelopment || Environment.isTest,
+      synchronize: Environment.isDevelopment || Environment.isTest
     });
   }
 
+  public static dataSource: DataSource;
+
   public async connect(): Promise<void> {
-    const stdout = process.stdout;
-
     try {
-      stdout.write("Attempting connection to the database....\n");
-      this._connection = await this._dataSource.initialize();
-
-      stdout.clearLine(0);
-      stdout.clearLine(0);
-      stdout.cursorTo(0);
+      this._connection = await ApplicationDbContext.dataSource.initialize();
 
       if (this._connection.isInitialized) {
         this._logger.logInfo("Connected to database");
       }
     } catch (error: unknown) {
-      stdout.clearLine(0);
-      stdout.clearLine(0);
-      stdout.cursorTo(0);
-
       if (error instanceof Error) {
         throw new Error(`Failed to connect to the database. Reason-> ${error.message}`);
       }
@@ -65,3 +57,5 @@ export class ApplicationDbContext {
     return this._connection.getRepository(Notification);
   }
 }
+
+export default ApplicationDbContext.dataSource;
