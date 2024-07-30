@@ -2,18 +2,19 @@
   "name": "notification-microservice",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/src/web/index.js",
+  "main": "dist/src/web/server.js",
   "directories": {
     "test": "test"
   },
+  "engine": ">=18.18.0",
   "scripts": {
     "build": "rimraf ./dist && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
-    "dev": "nodemon -r tsconfig-paths/register src/web/index.ts",
+    "dev": "nodemon ./src/web/server.ts",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "lint": "eslint --ext .ts,.js .",
-    "migration:create": "npx ts-node ./src/infrastructure/database/scripts/create-migration-file-script.ts",
+    "migrations:create": "npx ts-node ./src/infrastructure/database/scripts/create-migration-file-script.ts",
     "prepare": "husky install",
-    "start": "node dist/src/web/index.js",
+    "start": "node dist/src/web/server.js",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
@@ -21,6 +22,7 @@
   "keywords": [
     "microservice"
   ],
+  "homepage": "https://github.com/kvngdre/node-notification-microservice#README",
   "author": "John Kennedy Kalu",
   "license": "ISC",
   "dependencies": {

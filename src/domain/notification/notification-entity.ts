@@ -45,6 +45,8 @@ export class Notification {
   constructor(
     channel: NotificationChannel,
     data: string,
+    createdAt: Date,
+    updateAt: Date,
     status: NotificationStatus = NotificationStatus.PENDING,
     retryCount: number = 0
   ) {
@@ -52,7 +54,7 @@ export class Notification {
     this.data = data;
     this.status = status;
     this.retryCount = retryCount;
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
+    this.createdAt = createdAt;
+    this.updatedAt = updateAt;
   }
 }

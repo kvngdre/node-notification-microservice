@@ -1,7 +1,6 @@
 import { container, singleton } from "tsyringe";
-import { IRequest, IRequestHandler } from "@application/abstractions/mediator";
-import { ResultType } from "@shared-kernel/result";
-import { IMediator } from "@application/abstractions/mediator/mediator-interface";
+import { IRequest, IRequestHandler } from "@application/abstractions/messaging";
+import { ResultType, IMediator } from "@shared-kernel/index";
 
 type RequestHandlerType<T> = IRequestHandler<IRequest<T>, T>;
 

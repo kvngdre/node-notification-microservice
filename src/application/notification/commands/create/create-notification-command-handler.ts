@@ -1,32 +1,27 @@
 import { inject, Lifecycle, scoped } from "tsyringe";
-import { IRequestHandler } from "@application/abstractions/mediator";
+import { IRequestHandler } from "@application/abstractions/messaging";
 import { CreateNotificationCommand } from "./create-notification-command";
 import { NotificationResponse } from "@application/notification/notification-response";
-import { Result, ResultType } from "@shared-kernel/result";
+import { Result, ResultType, AbstractValidator, IDateTimeProvider } from "@shared-kernel/index";
 import {
   INotificationRepository,
   Notification,
   NotificationChannel,
-  NotificationExceptions,
+  // NotificationExceptions,
   NotificationStatus
 } from "@domain/notification";
-import { AbstractValidator } from "@shared-kernel/abstract-validator";
 
 @scoped(Lifecycle.ResolutionScoped)
-export class CreateNotificationCommandHandler extends IRequestHandler<
-  CreateNotificationCommand,
-  NotificationResponse
-> {
+export class CreateNotificationCommandHandler
+  implements IRequestHandler<CreateNotificationCommand, NotificationResponse>
+{
   constructor(
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository,
     @inject("CreateNotificationCommandValidator")
-    private readonly _createNotificationCommandValidator: AbstractValidator<CreateNotificationCommand>
-  ) {
-    super();
-
-    // this.mediator.registerHandler("CreateNotificationCommand", this);
-  }
+    private readonly _createNotificationCommandValidator: AbstractValidator<CreateNotificationCommand>,
+    @inject("DateTimeProvider") private readonly _dateTimeProvider: IDateTimeProvider
+  ) {}
 
   public async handle(
     command: CreateNotificationCommand
@@ -37,19 +32,19 @@ export class CreateNotificationCommandHandler extends IRequestHandler<
     if (isFailure) {
       return Result.failure(exception);
     }
+    const a = this._dateTimeProvider.utcNow();
+    const b = this._dateTimeProvider.utcNow();
+    console.log(a);
+    console.log(b);
 
     const notification = new Notification(
       value.channel as NotificationChannel,
       value.data,
+      this._dateTimeProvider.utcNow(),
+      this._dateTimeProvider.utcNow(),
       value.status as NotificationStatus,
       value.retryCount
     );
-
-    const found = await this._notificationRepository.findById(notification.id);
-
-    if (found === null) {
-      return Result.failure(NotificationExceptions.NotFound(notification.id));
-    }
 
     await this._notificationRepository.save(notification);
 

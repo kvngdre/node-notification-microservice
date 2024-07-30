@@ -1,4 +1,4 @@
-import { IRequest, IRequestHandler } from "@application/abstractions/mediator";
+import { IRequest, IRequestHandler } from "@application/abstractions/messaging";
 import { ResultType } from "@shared-kernel/result";
 
 export interface IMediator {

@@ -11,26 +11,22 @@ export class ApplicationDbContext {
 
   constructor(private readonly _logger: Logger) {
     const connectionURI = process.env.DB_URI;
-
     if (!connectionURI) {
       throw new Error("No database connection URI provided");
     }
-
-    ApplicationDbContext.dataSource = new DataSource({
+    this._dataSource = new DataSource({
       type: "postgres",
       url: connectionURI,
       connectTimeoutMS: Environment.isDevelopment ? 10_000 : 60_000,
       entities: ["**src/**/*-entity.{ts,js}"],
       migrations: ["**/migrations/*.{ts,js}"],
-      synchronize: Environment.isDevelopment || Environment.isTest
+      synchronize: true
     });
   }
 
-  public static dataSource: DataSource;
-
   public async connect(): Promise<void> {
     try {
-      this._connection = await ApplicationDbContext.dataSource.initialize();
+      this._connection = await this._dataSource.initialize();
 
       if (this._connection.isInitialized) {
         this._logger.logInfo("Connected to database");
@@ -56,5 +52,3 @@ export class ApplicationDbContext {
     return this._connection.getRepository(Notification);
   }
 }
-
-export default ApplicationDbContext.dataSource;

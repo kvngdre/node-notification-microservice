@@ -4,7 +4,7 @@ export class NotificationExceptions {
   public static readonly NotFound = (id: string) =>
     Exception.NotFound(
       "Notification.NotFound",
-      `Notification with the given identifier '${id}' not found.`
+      `Notification with the given identifier '${id}' was not found.`
     );
 
   public static readonly NotDelivered = Exception.NotFound(
