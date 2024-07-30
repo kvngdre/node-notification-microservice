@@ -19,11 +19,18 @@ export abstract class AbstractValidator<TRequest extends object> {
       isSuccess: result.success,
       isFailure: !result.success,
       exception: new ValidationException(
-        result.error.issues[0]!.code,
+        this._formatCode(result.error.issues[0]!.code),
         result.error.issues[0]!.message,
         result.error.issues[0]!.path
       )
     };
+  }
+
+  private _formatCode(code: string) {
+    let codeParts: string[] = code.replace(/_/g, " ").split(" ");
+    codeParts = codeParts.map((p) => p.charAt(0).toUpperCase() + p.slice(1));
+
+    return "Validation.".concat(codeParts.join(""));
   }
 }
 

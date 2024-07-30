@@ -12,6 +12,6 @@ export class ResourceNotFoundMiddleware extends AbstractMiddleware {
       `The requested resource at '${req.method} ${req.originalUrl}' not found.`
     );
 
-    res.status(404).json(ApiResponse.failure(exception));
+    res.status(404).json(ApiResponse.failure(exception, res));
   }
 }

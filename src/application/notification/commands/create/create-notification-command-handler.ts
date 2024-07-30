@@ -1,5 +1,5 @@
 import { inject, Lifecycle, scoped } from "tsyringe";
-import { IRequestHandler } from "@application/abstractions/messaging";
+import { IRequestHandler } from "@application/abstractions/mediator";
 import { CreateNotificationCommand } from "./create-notification-command";
 import { NotificationResponse } from "@application/notification/notification-response";
 import { Result, ResultType } from "@shared-kernel/result";
@@ -7,6 +7,7 @@ import {
   INotificationRepository,
   Notification,
   NotificationChannel,
+  NotificationExceptions,
   NotificationStatus
 } from "@domain/notification";
 import { AbstractValidator } from "@shared-kernel/abstract-validator";
@@ -43,6 +44,12 @@ export class CreateNotificationCommandHandler extends IRequestHandler<
       value.status as NotificationStatus,
       value.retryCount
     );
+
+    const found = await this._notificationRepository.findById(notification.id);
+
+    if (found === null) {
+      return Result.failure(NotificationExceptions.NotFound(notification.id));
+    }
 
     await this._notificationRepository.save(notification);
 

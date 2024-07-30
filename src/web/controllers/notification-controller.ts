@@ -22,7 +22,7 @@ export class NotificationsController extends BaseController {
 
     const result = await this.mediator.send<NotificationResponse>(command);
 
-    const { code, payload } = this.buildHttpResponse(result);
+    const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
   };

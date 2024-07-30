@@ -1,5 +1,5 @@
 import { container, Lifecycle } from "tsyringe";
-import { IRequestHandler } from "./abstractions/messaging";
+import { IRequestHandler } from "./abstractions/mediator";
 import { NotificationResponse } from "./notification/notification-response";
 import {
   CreateNotificationCommand,

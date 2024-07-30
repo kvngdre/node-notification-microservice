@@ -16,15 +16,19 @@ export class ErrorHandlingMiddleware extends AbstractErrorMiddleware {
     if (err instanceof SyntaxError && "body" in err) {
       const exception = new ValidationException(
         "Validation.MalformedJSON",
-        "An error occurred while parsing request JSON payload."
+        "An error occurred while parsing request JSON payload.",
+        []
       );
 
-      res.status(400).json(ApiResponse.failure(exception));
-      return;
+      res.status(400).json(ApiResponse.failure(exception, res));
+
+      return next();
     }
 
     await this._globalErrorHandler.handle(err);
 
-    res.status(500).json(ApiResponse.failure(Exception.Unexpected));
+    res.status(500).json(ApiResponse.failure(Exception.Unexpected, res));
+
+    next();
   }
 }

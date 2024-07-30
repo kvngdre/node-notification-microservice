@@ -52,7 +52,7 @@ export class Result<TValue> {
 // const res = new Result(true, "", undefined, undefined as never);
 // const res = Result.success("", 2);
 
-export type ResultType<TValue> = ISuccessResult<TValue> | IFailureResult;
+export type ResultType<TValue = unknown> = ISuccessResult<TValue> | IFailureResult;
 
 interface ISuccessResult<TValue> {
   get isSuccess(): true;
