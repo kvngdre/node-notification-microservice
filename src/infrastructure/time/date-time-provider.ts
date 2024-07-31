@@ -11,7 +11,7 @@ export class DateTimeProvider implements IDateTimeProvider {
     const dateTimeInUTC = new Date(new Date().toISOString());
 
     return (
-      options.inDateFormat === false ? dateTimeInUTC.getTime() : dateTimeInUTC
+      options.inDateFormat === true ? dateTimeInUTC : dateTimeInUTC.getTime()
     ) as T extends true ? Date : number;
   }
 

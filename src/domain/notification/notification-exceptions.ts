@@ -7,6 +7,11 @@ export class NotificationExceptions {
       `Notification with the given identifier '${id}' was not found.`
     );
 
+  public static readonly NoMatchFound = Exception.NotFound(
+    "Notification.NoMatchFound",
+    "No notifications found"
+  );
+
   public static readonly NotDelivered = Exception.NotFound(
     "Notification.NotDelivered",
     "Failed to deliver notification, please try again later."

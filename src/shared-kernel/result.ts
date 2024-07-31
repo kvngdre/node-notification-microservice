@@ -40,7 +40,7 @@ export class Result<TValue> {
     return this._exception;
   }
 
-  public static success<TValue = undefined>(message: string, value: TValue) {
+  public static success<TValue = undefined>(message: string, value?: TValue) {
     return new Result(true, message, value) as unknown as ISuccessResult<TValue>;
   }
 
