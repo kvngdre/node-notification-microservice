@@ -3,7 +3,7 @@ import { Logger } from "./logging";
 import { ILogger } from "@application/abstractions/logging/logger-interface";
 import { ApplicationDbContext } from "./database/application-db-context";
 import { NotificationRepository } from "./repositories";
-import { INotificationRepository } from "@domain/notification";
+import { INotificationRepository } from "@domain/notifications";
 import { Mediator } from "./mediator";
 import { IMediator } from "@shared-kernel/mediator-interface";
 import { IDateTimeProvider } from "@shared-kernel/date-time-provider-interface";

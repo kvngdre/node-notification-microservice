@@ -8,11 +8,11 @@ import { AbstractErrorMiddleware, AbstractMiddleware } from "./abstractions/type
 import { registerInfrastructureServices } from "@infrastructure/infrastructure-dependency-injection";
 import { registerApplicationServices } from "@application/application-dependency-injection";
 import { GlobalErrorHandler } from "./infrastructure/global-error-handler";
-import { CreateNotificationCommandHandler } from "@application/notification/commands/create";
+import { CreateNotificationCommandHandler } from "@application/notifications/commands/create";
 import { Mediator } from "@infrastructure/mediator/mediator";
-import { GetNotificationByIdQueryHandler } from "@application/notification/queries/get-by-id";
-import { GetNotificationsQueryHandler } from "@application/notification/queries/get";
-import { DeleteNotificationByIdCommandHandler } from "@application/notification/commands/delete-by-id";
+import { GetNotificationByIdQueryHandler } from "@application/notifications/queries/get-by-id";
+import { GetNotificationsQueryHandler } from "@application/notifications/queries/get";
+import { DeleteNotificationByIdCommandHandler } from "@application/notifications/commands/delete-by-id";
 
 export function registerServices() {
   registerInfrastructureServices();
@@ -47,6 +47,8 @@ export function registerServices() {
   );
 
   console.log("==>", { handlers: mediator.handlers });
+
+  mediator.registerHandlers();
 
   console.log("Service registration complete...");
 }

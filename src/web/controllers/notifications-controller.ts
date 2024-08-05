@@ -3,12 +3,12 @@ import { Lifecycle, scoped } from "tsyringe";
 import {
   CreateNotificationCommand,
   CreateNotificationRequest
-} from "@application/notification/commands/create";
+} from "@application/notifications/commands/create";
 import { BaseController } from "./base-controller";
-import { NotificationResponse } from "@application/notification/notification-response";
-import { GetNotificationByIdQuery } from "@application/notification/queries/get-by-id";
-import { GetNotificationsQuery } from "@application/notification/queries/get";
-import { DeleteNotificationByIdCommand } from "@application/notification/commands/delete-by-id";
+import { NotificationResponse } from "@application/notifications/notification-response";
+import { GetNotificationByIdQuery } from "@application/notifications/queries/get-by-id";
+import { GetNotificationsQuery } from "@application/notifications/queries/get";
+import { DeleteNotificationByIdCommand } from "@application/notifications/commands/delete-by-id";
 
 @scoped(Lifecycle.ResolutionScoped)
 export class NotificationsController extends BaseController {

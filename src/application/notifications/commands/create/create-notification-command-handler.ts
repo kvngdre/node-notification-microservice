@@ -1,15 +1,15 @@
 import { inject, Lifecycle, scoped } from "tsyringe";
 import { IRequestHandler } from "@application/abstractions/messaging";
 import { CreateNotificationCommand } from "./create-notification-command";
-import { NotificationResponse } from "@application/notification/notification-response";
-import { Result, ResultType, AbstractValidator, IDateTimeProvider } from "@shared-kernel/index";
+import { NotificationResponse } from "@application/notifications/notification-response";
+import { Result, ResultType, AbstractValidator } from "@shared-kernel/index";
 import {
   INotificationRepository,
   Notification,
   NotificationChannel,
   // NotificationExceptions,
   NotificationStatus
-} from "@domain/notification";
+} from "@domain/notifications";
 
 @scoped(Lifecycle.ResolutionScoped)
 export class CreateNotificationCommandHandler
@@ -19,8 +19,7 @@ export class CreateNotificationCommandHandler
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository,
     @inject("CreateNotificationCommandValidator")
-    private readonly _createNotificationCommandValidator: AbstractValidator<CreateNotificationCommand>,
-    @inject("DateTimeProvider") private readonly _dateTimeProvider: IDateTimeProvider
+    private readonly _createNotificationCommandValidator: AbstractValidator<CreateNotificationCommand>
   ) {}
 
   public async handle(
@@ -32,16 +31,10 @@ export class CreateNotificationCommandHandler
     if (isFailure) {
       return Result.failure(exception);
     }
-    const a = this._dateTimeProvider.utcNow();
-    const b = this._dateTimeProvider.utcNow();
-    console.log(a);
-    console.log(b);
 
     const notification = new Notification(
       value.channel as NotificationChannel,
       value.data,
-      this._dateTimeProvider.utcNow(),
-      this._dateTimeProvider.utcNow(),
       value.status as NotificationStatus,
       value.retryCount
     );

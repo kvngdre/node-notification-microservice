@@ -1,2 +1,2 @@
 export * from "./base-controller";
-export * from "./notification-controller";
+export * from "./notifications-controller";

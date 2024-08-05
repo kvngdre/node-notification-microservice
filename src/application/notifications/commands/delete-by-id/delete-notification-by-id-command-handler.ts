@@ -2,7 +2,7 @@ import { inject, Lifecycle, scoped } from "tsyringe";
 import { IRequestHandler } from "@application/abstractions/messaging";
 import { DeleteNotificationByIdCommand } from "./delete-notification-by-id-command";
 import { Result, ResultType } from "@shared-kernel/result";
-import { INotificationRepository, NotificationExceptions } from "@domain/notification";
+import { INotificationRepository, NotificationExceptions } from "@domain/notifications";
 
 @scoped(Lifecycle.ResolutionScoped)
 export class DeleteNotificationByIdCommandHandler
@@ -13,7 +13,7 @@ export class DeleteNotificationByIdCommandHandler
     private readonly _notificationRepository: INotificationRepository
   ) {}
 
-  public async handle(command: DeleteNotificationByIdCommand): Promise<ResultType<void>> {
+  public async handle(command: DeleteNotificationByIdCommand): Promise<ResultType> {
     const notification = await this._notificationRepository.findById(command.notificationId);
 
     if (notification === null) {

@@ -1,5 +1,5 @@
 import { Lifecycle, scoped } from "tsyringe";
-import { INotificationRepository, Notification } from "@domain/notification";
+import { INotificationRepository, Notification } from "@domain/notifications";
 import { ApplicationDbContext } from "@infrastructure/database/application-db-context";
 
 @scoped(Lifecycle.ResolutionScoped)

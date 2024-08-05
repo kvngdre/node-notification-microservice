@@ -1,4 +1,6 @@
 import { container, singleton } from "tsyringe";
+import * as glob from "glob";
+import * as fs from "fs";
 import { IRequest, IRequestHandler } from "@application/abstractions/messaging";
 import { ResultType, IMediator } from "@shared-kernel/index";
 
@@ -10,6 +12,10 @@ export class Mediator implements IMediator {
 
   constructor() {
     this.registerHandler.bind(this);
+  }
+
+  public get handlers() {
+    return this._handlers;
   }
 
   public async send<TValue>(request: IRequest<TValue>): Promise<ResultType<TValue>> {
@@ -36,12 +42,12 @@ export class Mediator implements IMediator {
   }
 
   public registerHandlers() {
-    const requests = container.resolveAll("CommandHandler");
+    const pattern = "**/*-handler.ts";
 
-    console.log({ requests });
-  }
+    const handlerFiles = glob.sync(pattern, {
+      ignore: ["node_modules/**"]
+    });
 
-  public get handlers() {
-    return this._handlers;
+    console.log(handlerFiles);
   }
 }

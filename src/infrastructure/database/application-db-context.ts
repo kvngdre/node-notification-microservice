@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { singleton } from "tsyringe";
-import { Notification } from "@domain/notification/notification-entity";
+import { Notification } from "@domain/notifications/notification-entity";
 import { Environment } from "@shared-kernel/environment";
 import { Logger } from "@infrastructure/logging/logger";
 
@@ -14,6 +14,7 @@ export class ApplicationDbContext {
     if (!connectionURI) {
       throw new Error("No database connection URI provided");
     }
+
     this._dataSource = new DataSource({
       type: "postgres",
       url: connectionURI,

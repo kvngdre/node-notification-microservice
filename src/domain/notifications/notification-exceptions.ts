@@ -12,6 +12,7 @@ export class NotificationExceptions {
     "No notifications found"
   );
 
+  // ! TODO: fix the exception type
   public static readonly NotDelivered = Exception.NotFound(
     "Notification.NotDelivered",
     "Failed to deliver notification, please try again later."

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { container } from "tsyringe";
-import { NotificationsController } from "@web/controllers/notification-controller";
+import { NotificationsController } from "@web/controllers/notifications-controller";
 
 const router = Router();
 const notificationController = container.resolve(NotificationsController);

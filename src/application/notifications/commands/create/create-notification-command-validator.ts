@@ -2,7 +2,7 @@ import { Lifecycle, scoped } from "tsyringe";
 import { z } from "zod";
 import { AbstractValidator, ValidationResultType } from "@shared-kernel/abstract-validator";
 import { CreateNotificationCommand } from "./create-notification-command";
-import { NotificationChannel, NotificationStatus } from "@domain/notification";
+import { NotificationChannel, NotificationStatus } from "@domain/notifications";
 
 @scoped(Lifecycle.ResolutionScoped)
 export class CreateNotificationCommandValidator extends AbstractValidator<CreateNotificationCommand> {

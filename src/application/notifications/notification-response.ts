@@ -1,4 +1,4 @@
-import { Notification } from "@domain/notification";
+import { Notification } from "@domain/notifications";
 
 export class NotificationResponse {
   private constructor(

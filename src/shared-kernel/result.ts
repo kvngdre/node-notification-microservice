@@ -45,14 +45,14 @@ export class Result<TValue> {
   }
 
   public static failure(exception: Exception) {
-    return new Result(false, undefined, undefined, exception) as unknown as IFailureResult;
+    return new Result<never>(false, undefined, undefined, exception) as unknown as IFailureResult;
   }
 }
 
 // const res = new Result(true, "", undefined, undefined as never);
 // const res = Result.success("", 2);
 
-export type ResultType<TValue = unknown> = ISuccessResult<TValue> | IFailureResult;
+export type ResultType<TValue = undefined> = ISuccessResult<TValue> | IFailureResult;
 
 interface ISuccessResult<TValue> {
   get isSuccess(): true;
