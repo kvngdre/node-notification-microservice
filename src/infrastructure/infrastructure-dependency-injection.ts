@@ -8,6 +8,7 @@ import { Mediator } from "./mediator";
 import { IMediator } from "@shared-kernel/mediator-interface";
 import { IDateTimeProvider } from "@shared-kernel/date-time-provider-interface";
 import { DateTimeProvider } from "./time";
+import { NotificationPublisher } from "./publisher";
 
 export function registerInfrastructureServices() {
   container.registerSingleton<ILogger>("Logger", Logger);
@@ -18,4 +19,5 @@ export function registerInfrastructureServices() {
   container.register<INotificationRepository>("NotificationRepository", NotificationRepository, {
     lifecycle: Lifecycle.ResolutionScoped
   });
+  container.registerSingleton("NotificationPublisher", NotificationPublisher);
 }

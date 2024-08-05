@@ -13,6 +13,7 @@ import { Mediator } from "@infrastructure/mediator/mediator";
 import { GetNotificationByIdQueryHandler } from "@application/notifications/queries/get-by-id";
 import { GetNotificationsQueryHandler } from "@application/notifications/queries/get";
 import { DeleteNotificationByIdCommandHandler } from "@application/notifications/commands/delete-by-id";
+import { SendNotificationCommandHandler } from "@application/notifications/commands/send";
 
 export function registerServices() {
   registerInfrastructureServices();
@@ -45,10 +46,14 @@ export function registerServices() {
     "DeleteNotificationByIdCommand",
     container.resolve(DeleteNotificationByIdCommandHandler)
   );
+  mediator.registerHandler(
+    "SendNotificationCommandHandler",
+    container.resolve(SendNotificationCommandHandler)
+  );
 
-  console.log("==>", { handlers: mediator.handlers });
+  console.log("==>", { handlers: mediator.handlers.size });
 
-  mediator.registerHandlers();
+  // mediator.registerHandlers();
 
   console.log("Service registration complete...");
 }

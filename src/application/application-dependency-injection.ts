@@ -16,6 +16,11 @@ import {
   DeleteNotificationByIdCommand,
   DeleteNotificationByIdCommandHandler
 } from "./notifications/commands/delete-by-id";
+import {
+  SendNotificationCommand,
+  SendNotificationCommandHandler,
+  SendNotificationCommandValidator
+} from "./notifications/commands/send";
 
 export function registerApplicationServices() {
   container.register<IRequestHandler<CreateNotificationCommand, NotificationResponse>>(
@@ -46,10 +51,24 @@ export function registerApplicationServices() {
       lifecycle: Lifecycle.ResolutionScoped
     }
   );
+  container.register<IRequestHandler<SendNotificationCommand>>(
+    "CommandHandler",
+    SendNotificationCommandHandler,
+    {
+      lifecycle: Lifecycle.ResolutionScoped
+    }
+  );
 
   container.register<AbstractValidator<CreateNotificationCommand>>(
     "CreateNotificationCommandValidator",
     CreateNotificationCommandValidator,
+    {
+      lifecycle: Lifecycle.ResolutionScoped
+    }
+  );
+  container.register<AbstractValidator<SendNotificationCommand>>(
+    "SendNotificationCommandValidator",
+    SendNotificationCommandValidator,
     {
       lifecycle: Lifecycle.ResolutionScoped
     }

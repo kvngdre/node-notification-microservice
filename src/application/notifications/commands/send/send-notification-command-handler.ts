@@ -4,7 +4,8 @@ import { SendNotificationCommand } from "./send-notification-command";
 import { Result, ResultType } from "@shared-kernel/result";
 import { INotificationRepository } from "@domain/notifications/notification-repository-interface";
 import { AbstractValidator } from "@shared-kernel/abstract-validator";
-import { Notification, NotificationExceptions, NotificationStatus } from "@domain/notifications";
+import { Notification } from "@domain/notifications";
+import { IPublisher } from "@application/abstractions/publisher";
 
 @scoped(Lifecycle.ResolutionScoped)
 export class SendNotificationCommandHandler implements IRequestHandler<SendNotificationCommand> {
@@ -12,7 +13,9 @@ export class SendNotificationCommandHandler implements IRequestHandler<SendNotif
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository,
     @inject("SendNotificationCommandValidator")
-    private readonly _sendNotificationCommandValidator: AbstractValidator<SendNotificationCommand>
+    private readonly _sendNotificationCommandValidator: AbstractValidator<SendNotificationCommand>,
+    @inject("NotificationPublisher")
+    private readonly _notificationPublisher: IPublisher<Notification>
   ) {}
 
   public async handle(command: SendNotificationCommand): Promise<ResultType> {
@@ -27,7 +30,7 @@ export class SendNotificationCommandHandler implements IRequestHandler<SendNotif
 
     this._notificationRepository.save(notification);
 
-    // TODO: SEND NOTIFICATION...
+    await this._notificationPublisher.publish(notification);
 
     return Result.success("Notification queued successfully");
   }
