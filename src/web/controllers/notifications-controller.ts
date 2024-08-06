@@ -9,6 +9,10 @@ import { NotificationResponse } from "@application/notifications/notification-re
 import { GetNotificationByIdQuery } from "@application/notifications/queries/get-by-id";
 import { GetNotificationsQuery } from "@application/notifications/queries/get";
 import { DeleteNotificationByIdCommand } from "@application/notifications/commands/delete-by-id";
+import {
+  SendNotificationCommand,
+  SendNotificationRequest
+} from "@application/notifications/commands/send";
 
 @scoped(Lifecycle.ResolutionScoped)
 export class NotificationsController extends BaseController {
@@ -69,7 +73,20 @@ export class NotificationsController extends BaseController {
   ) => {
     const command = new DeleteNotificationByIdCommand(req.params.notificationId);
 
-    const result = await this.mediator.send<NotificationResponse>(command);
+    const result = await this.mediator.send(command);
+
+    const { code, payload } = this.buildHttpResponse(result, res);
+
+    return res.status(code).json(payload);
+  };
+
+  public sendNotification = async (
+    req: Request<object, object, SendNotificationRequest>,
+    res: Response
+  ) => {
+    const command = new SendNotificationCommand(req.body.channel, req.body.data);
+
+    const result = await this.mediator.send(command);
 
     const { code, payload } = this.buildHttpResponse(result, res);
 

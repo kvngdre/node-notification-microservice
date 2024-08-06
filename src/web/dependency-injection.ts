@@ -47,7 +47,7 @@ export function registerServices() {
     container.resolve(DeleteNotificationByIdCommandHandler)
   );
   mediator.registerHandler(
-    "SendNotificationCommandHandler",
+    "SendNotificationCommand",
     container.resolve(SendNotificationCommandHandler)
   );
 

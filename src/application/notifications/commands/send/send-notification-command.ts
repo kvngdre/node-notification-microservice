@@ -8,6 +8,11 @@ export class SendNotificationCommand implements IRequest {
   ) {}
 }
 
+export type NotificationDataType =
+  | IEmailNotificationData
+  | ISMSNotificationData
+  | IPushNotificationData;
+
 type NotificationData<T> = T extends NotificationChannel.EMAIL
   ? IEmailNotificationData
   : T extends NotificationChannel.SMS

@@ -79,7 +79,7 @@ export class NotificationPublisher implements IPublisher<Notification> {
     return Buffer.from(JSON.stringify(data));
   }
 
-  public async _dispose() {
+  private async _dispose() {
     if (this._connection) {
       await this._connection.close();
       this._connection = null;

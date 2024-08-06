@@ -42,10 +42,6 @@ export class SendNotificationCommandValidator extends AbstractValidator<SendNoti
     const dataSchema = z.union([emailDataSchema, smsDataSchema, pushDataSchema]);
 
     const schema = z.object({
-      applicationId: z
-        .string()
-        .trim()
-        .regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid application ID" }),
       channel: z.nativeEnum(NotificationChannel),
       data: dataSchema
     });

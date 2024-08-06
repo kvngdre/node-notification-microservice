@@ -21,9 +21,6 @@ export class Mediator implements IMediator {
   public async send<TValue>(request: IRequest<TValue>): Promise<ResultType<TValue>> {
     const requestName: string = Object.getPrototypeOf(request).constructor.name;
 
-    // const handler = this._handlers[requestName];
-    console.log({ requestName });
-    console.log({ handlers: this._handlers });
     const handler = this._handlers.get(requestName) as RequestHandlerType<TValue>;
 
     if (!handler) {
