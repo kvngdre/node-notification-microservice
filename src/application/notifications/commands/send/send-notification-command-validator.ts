@@ -17,7 +17,6 @@ export class SendNotificationCommandValidator extends AbstractValidator<SendNoti
       body: z.string().trim().min(1).max(2_000),
       attachments: z
         .array(z.object({ filename: z.string(), content: z.custom<Buffer>(isBuffer) }))
-        .min(1)
         .optional()
     });
 

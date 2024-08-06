@@ -33,8 +33,6 @@ export class NotificationPublisher implements IPublisher<Notification> {
     } catch (error) {
       this._logger.logError("Error publishing notification");
       throw error;
-    } finally {
-      await this._dispose();
     }
   }
 
@@ -77,16 +75,5 @@ export class NotificationPublisher implements IPublisher<Notification> {
 
   private _serializeData<T>(data: T): Buffer {
     return Buffer.from(JSON.stringify(data));
-  }
-
-  private async _dispose() {
-    if (this._connection) {
-      await this._connection.close();
-      this._connection = null;
-    }
-    if (this._channel) {
-      await this._channel.close();
-      this._channel = null;
-    }
   }
 }
