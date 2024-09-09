@@ -20,7 +20,7 @@ export class GlobalErrorHandler {
 
     GlobalErrorHandler.isRegistered = true;
 
-    console.log("Listeners registered...");
+    this._logger.logDebug("Listeners registered...✅");
   }
 
   public async handle(error: Error): Promise<void> {

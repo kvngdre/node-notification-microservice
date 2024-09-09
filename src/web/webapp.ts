@@ -1,4 +1,6 @@
 import express, { json, urlencoded, type Express } from "express";
+import cors from "cors";
+import helmet from "helmet";
 import { container } from "tsyringe";
 import { Environment } from "src/shared-kernel";
 import { IWebAppOptions } from "./abstractions/interfaces";
@@ -49,19 +51,23 @@ export default class Webapp {
       this._logger.logInfo(`Server running on port: [${port}]`);
 
       if (Environment.isDevelopment) {
-        this._logger.logInfo(`http://localhost:${port}/api/v1/health`);
+        this._logger.logInfo(`http://localhost:${port}/api/v1`);
       }
     });
   }
 
   private _setup(): void {
+    this._app.use(cors());
+    this._app.use(helmet());
+
     this._app.use(json());
     this._app.use(urlencoded({ extended: true }));
+
     this._app.use(this._requestLoggingMiddleware.execute);
 
     this._app.use("/api/v1", apiRouter);
+    this._app.use("*", this._resourceNotFoundMiddleware.execute);
 
-    this._app.use(this._resourceNotFoundMiddleware.execute);
     this._app.use(this._errorHandlingMiddleware.execute);
   }
 

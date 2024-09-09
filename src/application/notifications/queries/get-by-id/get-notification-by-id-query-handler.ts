@@ -1,9 +1,9 @@
 import { inject, Lifecycle, scoped } from "tsyringe";
-import { IRequestHandler } from "@application/abstractions/messaging";
 import { GetNotificationByIdQuery } from "./get-notification-by-id-query";
 import { NotificationResponse } from "@application/notifications/notification-response";
 import { Result, ResultType } from "@shared-kernel/result";
 import { INotificationRepository, NotificationExceptions } from "@domain/notifications";
+import { IRequestHandler } from "@infrastructure/mediator/request-handler-interface";
 
 @scoped(Lifecycle.ResolutionScoped)
 export class GetNotificationByIdQueryHandler

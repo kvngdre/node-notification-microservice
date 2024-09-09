@@ -1,5 +1,4 @@
 import { inject, Lifecycle, scoped } from "tsyringe";
-import { IRequestHandler } from "@application/abstractions/messaging";
 import { CreateNotificationCommand } from "./create-notification-command";
 import { NotificationResponse } from "@application/notifications/notification-response";
 import { Result, ResultType, AbstractValidator } from "@shared-kernel/index";
@@ -10,6 +9,7 @@ import {
   // NotificationExceptions,
   NotificationStatus
 } from "@domain/notifications";
+import { IRequestHandler } from "@infrastructure/mediator";
 
 @scoped(Lifecycle.ResolutionScoped)
 export class CreateNotificationCommandHandler

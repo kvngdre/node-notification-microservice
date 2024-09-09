@@ -1,5 +1,5 @@
-import { IRequest } from "@application/abstractions/messaging";
 import { NotificationChannel } from "@domain/notifications";
+import { IRequest } from "@infrastructure/mediator/request-interface";
 
 export class SendNotificationCommand implements IRequest {
   constructor(
