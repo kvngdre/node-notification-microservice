@@ -11,29 +11,30 @@ This microservice is crafted with a focus on scalable and efficient architecture
 - [Robert C. Martin's Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html): Structured to ensure separation of concerns and independent maintainability.
 - [Domain-Driven Design(DDD)](https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/february/best-practice-an-introduction-to-domain-driven-design): Applied to align the software model closely with the business domain and logic.
 
-## Components
+### Components
 
 - **Notification Microservice**: Handles the core notification logic and operations.
 - **Worker Node**: Manages background tasks and processes notifications asynchronously.
 
 ## Features
 
-- **Daily log rotation**: Automatically rotates logs daily to manage log file size and maintain performance.
+- **Daily Log Rotation**: Automatically rotates logs daily to manage log file size and maintain performance.
 - **Dependency Injection**: Utilizes dependency injection to manage service dependencies and improve testability.
-- **CQRS pattern (Command Query Responsibility Segregation)**: Separates command (write) and query (read) responsibilities for optimized performance and scalability.
-- **Mediator pattern**: Facilitates communication between components and handles requests and responses in a decoupled manner.
-- Request Handler self discovery and registration
-- Asynchronous communication with notification worker(s)
-- Message Broker Integration with RabbitMQ
+- **CQRS Pattern (Command Query Responsibility Segregation)**: Separates command (write) and query (read) responsibilities for optimized performance and scalability.
+- **Mediator Pattern**: Facilitates communication between components and handles requests and responses in a decoupled manner.
+- **Request Handler Self Discovery and Registration**: Automatically discovers and registers request handlers to streamline the addition of new handlers.
+- **Asynchronous Communication**: Interfaces with notification worker(s) to handle background processing and ensure efficient notification delivery.
+- **Message Broker Integration with RabbitMQ**: Utilizes RabbitMQ for reliable and scalable message queuing, ensuring robust message handling and delivery.
 
 ## Getting Started
 
-### Prerequisties
+### Prerequisites
 
 Ensure you have the following installed:
 
 - [Node.js](https://nodejs.org/en/download/package-manager) (version 20.0.0 or later)
-- RabbitMQ
+- [RabbitMQ](https://www.rabbitmq.com/) (for message brokering)
+- [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) (for containerization)
 
 ### Installation
 
@@ -61,24 +62,54 @@ Ensure you have the following installed:
 
 ### Running the Service
 
-To start the microservice, use the following command:
+You have two options to run the service:
 
-```sh
-npm start
-```
+#### Option 1: Using Docker Compose
 
-### Usage
+Docker Compose simplifies the process of running the microservice along with its dependencies.
 
-- Send a notification: To send a notification, make a request to the appropriate API endpoint.
+1. Ensure Docker and Docker Compose are installed.
+2. Navigate to the project directory:
 
-  Example:
+   ```sh
+   cd path/to/your/repository
+   ```
 
-  ```sh
-  curl -X POST http://localhost:3000/notifications \
-    -H "Content-Type: application/json" \
-    -d '{"channel": "email", "data": {"email": "user@example.com", "message": "Hello, World!"}}'
+3. Start the services using Docker Compose:
 
-  ```
+   ```sh
+   docker-compose up
+   ```
+
+   This command will start RabbitMQ, PostgreSQL, and the API services. The API service will be available on port 8822, RabbitMQ management console on port 15672, and PostgreSQL on port 5432
+
+4. Stop the services:
+
+   ```sh
+   docker-compose down
+   ```
+
+#### Option 2: Manual Setup
+
+If you prefer to run the services manually or do not use Docker Compose, follow these steps:
+
+1. Start RabbitMQ:
+
+   ```sh
+   docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+   ```
+
+2. Start PostgresSQL:
+
+   ```sh
+   docker run -d --name notification_ms_database -p 5432:5432 -e POSTGRES_DB=notification-microservice -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres postgres:13.3-alpine
+   ```
+
+3. Start the API service:
+
+   ```sh
+   npm start
+   ```
 
 ## Feature Requests
 

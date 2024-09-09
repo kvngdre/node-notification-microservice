@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  database:
+    container_name: notification_ms_database
+    image: postgres:13.3-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - notification_ms_db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: notification-microservice
+
+  api:
+    container_name: notification-ms-api
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - 8822:8822
+    environment:
+      NODE_ENV: production
+      PORT: 8822
+      DB_URI: postgres://postgres:postgres@database:5432/notification-microservice
+      RMQ_HOST: rabbitmq
+      RMQ_PORT: 5672
+    depends_on:
+      - database
+      - rabbitmq
+
+volumes:
+  rabbitmq_data:
+  notification_ms_db_data:

@@ -1,0 +1,6 @@
+.vscode/
+coverage/
+node_modules/
+.gitignore
+logs/
+__tests__/
