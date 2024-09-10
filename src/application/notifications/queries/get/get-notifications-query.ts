@@ -1,4 +1,4 @@
-import { IRequest } from "@application/abstractions/messaging";
+import { IRequest } from "@infrastructure/mediator/request-interface";
 
 export class GetNotificationsQuery implements IRequest {
   constructor(

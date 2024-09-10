@@ -6,7 +6,9 @@
   "directories": {
     "test": "test"
   },
-  "engine": ">=18.18.0",
+  "engine": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "build": "rimraf ./dist && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "dev": "nodemon ./src/web/server.ts",

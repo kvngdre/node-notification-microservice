@@ -13,7 +13,8 @@ import {
 import { GetNotificationsQuery, GetNotificationsQueryHandler } from "./notifications/queries/get";
 import {
   DeleteNotificationByIdCommand,
-  DeleteNotificationByIdCommandHandler
+  DeleteNotificationByIdCommandHandler,
+  DeleteNotificationByIdCommandValidator
 } from "./notifications/commands/delete-by-id";
 import {
   SendNotificationCommand,
@@ -69,6 +70,13 @@ export function registerApplicationServices() {
   container.register<AbstractValidator<SendNotificationCommand>>(
     "SendNotificationCommandValidator",
     SendNotificationCommandValidator,
+    {
+      lifecycle: Lifecycle.ResolutionScoped
+    }
+  );
+  container.register<AbstractValidator<DeleteNotificationByIdCommand>>(
+    "DeleteNotificationByIdCommandValidator",
+    DeleteNotificationByIdCommandValidator,
     {
       lifecycle: Lifecycle.ResolutionScoped
     }
