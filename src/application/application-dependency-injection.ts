@@ -1,5 +1,4 @@
 import { container, Lifecycle } from "tsyringe";
-import { IRequestHandler } from "./abstractions/messaging";
 import { NotificationResponse } from "./notifications/notification-response";
 import {
   CreateNotificationCommand,
@@ -21,6 +20,7 @@ import {
   SendNotificationCommandHandler,
   SendNotificationCommandValidator
 } from "./notifications/commands/send";
+import { IRequestHandler } from "@infrastructure/mediator/request-handler-interface";
 
 export function registerApplicationServices() {
   container.register<IRequestHandler<CreateNotificationCommand, NotificationResponse>>(
