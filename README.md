@@ -14,7 +14,7 @@ This microservice is crafted with a focus on scalable and efficient architecture
 ### Components
 
 - **Notification Microservice**: Handles the core notification logic and operations.
-- **Worker Node**: Manages background tasks and processes notifications asynchronously.
+- **[Worker Node](https://github.com/kvngdre/node-notification-microservice-worker-node)**: Manages background tasks and processes notifications asynchronously.
 
 ## Features
 
@@ -25,6 +25,19 @@ This microservice is crafted with a focus on scalable and efficient architecture
 - **Request Handler Self Discovery and Registration**: Automatically discovers and registers request handlers to streamline the addition of new handlers.
 - **Asynchronous Communication**: Interfaces with notification worker(s) to handle background processing and ensure efficient notification delivery.
 - **Message Broker Integration with RabbitMQ**: Utilizes RabbitMQ for reliable and scalable message queuing, ensuring robust message handling and delivery.
+- **Dead Letter Queue**: Handles failed notification retries to ensure robust error management.
+
+## Planned Features
+
+The project roadmap includes the following potential features:
+
+1. Webhook Support: Integrate webhooks for real-time event notifications and enhanced integration with third-party systems.
+
+2. Priority-based Notification Delivery: Support for different priority levels to ensure urgent notifications are delivered first.
+
+3. Advanced Retry Policies: Implement customizable retry policies with exponential backoff, giving users fine control over retry strategies for failed notifications.
+
+4. Rate Limiting & Throttling: Implement rate-limiting mechanisms to avoid overloading email/SMS providers, ensuring compliance with service limits.
 
 ## Getting Started
 
@@ -78,7 +91,7 @@ Docker Compose simplifies the process of running the microservice along with its
 3. Start the services using Docker Compose:
 
    ```sh
-   docker-compose up
+   docker-compose -f docker-compose.notification-ms.yml up
    ```
 
    This command will start RabbitMQ, PostgreSQL, and the API services. The API service will be available on port 8822, RabbitMQ management console on port 15672, and PostgreSQL on port 5432

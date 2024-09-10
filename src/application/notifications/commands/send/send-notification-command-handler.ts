@@ -3,7 +3,7 @@ import { SendNotificationCommand } from "./send-notification-command";
 import { Result, ResultType } from "@shared-kernel/result";
 import { INotificationRepository } from "@domain/notifications/notification-repository-interface";
 import { AbstractValidator } from "@shared-kernel/abstract-validator";
-import { Notification, NotificationStatus } from "@domain/notifications";
+import { Notification } from "@domain/notifications";
 import { IPublisher } from "@application/abstractions/publisher";
 import { IRequestHandler } from "@infrastructure/mediator/request-handler-interface";
 
