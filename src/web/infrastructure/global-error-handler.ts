@@ -20,7 +20,7 @@ export class GlobalErrorHandler {
 
     GlobalErrorHandler.isRegistered = true;
 
-    this._logger.logDebug("Listeners registered...✅");
+    this._logger.logDebug("Process listeners registered...✅");
   }
 
   public async handle(error: Error): Promise<void> {

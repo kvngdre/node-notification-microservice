@@ -11,7 +11,7 @@ export class NotificationPublisher implements IPublisher<Notification> {
   private readonly _exchangeType = process.env.RMQ_EXCHANGE_TYPE || "direct";
   private readonly _routingKey = process.env.RMQ_MAIN_QUEUE_ROUTING_KEY || "publish_notification";
   private readonly _queue = process.env.RMQ_MAIN_QUEUE_NAME || "send_notification_queue";
-  private readonly _dlqRoutingKey = process.env.RMQ_DLQ_ROUTING_KEY || "send_notification_dlq";
+  private readonly _dlqRoutingKey = process.env.RMQ_DLQ_ROUTING_KEY || "failed_notification";
   private readonly _rmqHostname = process.env.RMQ_HOST || "localhost";
   private readonly _rmqPort = process.env.RMQ_PORT || 5672;
   private _connection: Connection | null = null;

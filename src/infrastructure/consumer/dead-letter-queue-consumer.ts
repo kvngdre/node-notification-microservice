@@ -9,6 +9,9 @@ import { IDateTimeProvider } from "@shared-kernel/date-time-provider-interface";
 
 @singleton()
 export class DeadLetterQueueConsumer implements IConsumer {
+  private readonly _exchangeName = process.env.RMQ_EXCHANGE_NAME || "notification_events";
+  private readonly _exchangeType = process.env.RMQ_EXCHANGE_TYPE || "direct";
+  private readonly _dlqRoutingKey = process.env.RMQ_DLQ_ROUTING_KEY || "failed_notification";
   private readonly _dlqQueue = process.env.RMQ_DLQ_QUEUE || "send_notification_dlq";
   private readonly _mainQueue = process.env.RMQ_MAIN_QUEUE || "send_notification_queue";
   private readonly _retryLimit = Number(process.env.RETRY_LIMIT) || 3;
@@ -30,7 +33,11 @@ export class DeadLetterQueueConsumer implements IConsumer {
     const channel = await connection.createChannel();
 
     // Assert the DLQ Queue exists
+    await channel.assertExchange(this._exchangeName, this._exchangeType, {
+      durable: true
+    });
     await channel.assertQueue(this._dlqQueue, { durable: true });
+    await channel.bindQueue(this._dlqQueue, this._exchangeName, this._dlqRoutingKey);
 
     // Start consuming messages from the DLQ
     channel.consume(
@@ -40,23 +47,28 @@ export class DeadLetterQueueConsumer implements IConsumer {
 
         try {
           const notification: Notification = JSON.parse(msg.content.toString());
-          const retryCount = this._getRetryCount(msg);
 
-          this._logger.logInfo(`DLQ message received: ${notification}, Retry Count: ${retryCount}`);
+          this._logger.logInfo(
+            `DLQ message received: ${notification}, Retry Count: ${notification.retryCount}`
+          );
 
           // Update database with retry attempt
-          notification.retryCount = retryCount;
+          notification.retryCount += 1;
           notification.updatedAt = this._dateTimeProvider.utcNow();
           await this._notificationRepository.save(notification);
 
-          if (retryCount < this._retryLimit) {
+          if (notification.retryCount < this._retryLimit) {
             // If retry limit not reached, requeue the message
-            this._requeueMessage(channel, msg, notification, retryCount);
+            this._requeueMessage(channel, msg, notification);
+
+            this._logger.logDebug("Requeued the notification");
           } else {
             // If retry limit is reached, mark the message as permanently failed
             notification.status = NotificationStatus.FAILED;
             notification.updatedAt = this._dateTimeProvider.utcNow();
             await this._notificationRepository.save(notification);
+
+            this._logger.logDebug("Notification marked as failure");
 
             channel.ack(msg); // Acknowledge the message to remove it from DLQ
           }
@@ -67,11 +79,12 @@ export class DeadLetterQueueConsumer implements IConsumer {
               error.stack
             );
           }
-          // Optionally nack without requeue if processing fails
+
+          // nack without requeue if processing fails
           channel.nack(msg, false, false);
         }
       },
-      { noAck: false } // Make sure to acknowledge only when processing is complete
+      { noAck: false }
     );
 
     process.on("SIGTERM", async () => {
@@ -79,6 +92,8 @@ export class DeadLetterQueueConsumer implements IConsumer {
       await channel.close();
       await connection.close();
     });
+
+    this._logger.logInfo("Dead Letter Queue Consumer running...🚀");
   }
 
   private async _getConnection() {
@@ -94,31 +109,16 @@ export class DeadLetterQueueConsumer implements IConsumer {
     return this._connection;
   }
 
-  // Extracts retry count from message headers (if using custom headers for retries)
-  private _getRetryCount(msg: ConsumeMessage): number {
-    const headers = msg.properties.headers;
-    return headers ? headers["x-retry-count"] : 0; // Defaults to 0 if no retries have been made
-  }
-
   // Requeue the message back to the main notification queue with updated retry count
-  private _requeueMessage(
-    channel: Channel,
-    msg: ConsumeMessage,
-    notification: Notification,
-    retryCount: number
-  ) {
-    const newHeaders = {
-      ...msg.properties.headers,
-      "x-retry-count": retryCount + 1
-    };
-
+  private _requeueMessage(channel: Channel, msg: ConsumeMessage, notification: Notification) {
     channel.sendToQueue(this._mainQueue, Buffer.from(JSON.stringify(notification)), {
-      headers: newHeaders,
       persistent: Environment.isProduction
     });
 
     channel.ack(msg); // Acknowledge the message to remove it from DLQ
 
-    this._logger.logInfo(`Requeued message to main queue with retry count: ${retryCount + 1}`);
+    this._logger.logInfo(
+      `Requeued message to main queue with retry count: ${notification.retryCount}`
+    );
   }
 }

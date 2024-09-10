@@ -21,5 +21,5 @@ export function registerServices() {
   });
   container.registerSingleton("GlobalErrorHandler", GlobalErrorHandler);
 
-  container.resolve<ILogger>("Logger").logDebug("Service registration complete...✅");
+  container.resolve<ILogger>("Logger").logDebug("Services registration complete...✅");
 }
