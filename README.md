@@ -121,7 +121,7 @@ If you prefer to run the services manually or do not use Docker Compose, follow 
 3. Start the API service:
 
    ```sh
-   npm start
+   npm run dev
    ```
 
 ## Feature Requests

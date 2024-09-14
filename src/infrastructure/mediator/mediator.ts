@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { container, singleton } from "tsyringe";
-import * as glob from "glob";
+import { sync } from "glob";
 import path from "path";
 import { ResultType, IMediator } from "@shared-kernel/index";
 import { IRequestHandler } from "./request-handler-interface";
@@ -40,14 +40,15 @@ export class Mediator implements IMediator {
 
   private async _discoverAndRegisterHandlers() {
     const pattern = "**/*-handler.{ts,js}";
-    const handlerFiles = glob.sync(pattern, {
+    const handlerFiles = sync(pattern, {
       ignore: ["node_modules/**"]
     });
 
     for (const file of handlerFiles) {
       // Dynamically import the handler file
       const filePath = path.resolve(file);
-      const handlerModule = await import(filePath);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const handlerModule = await require(filePath);
 
       // Iterate over the module's exports to find the handler class
       for (const key of Object.keys(handlerModule)) {
