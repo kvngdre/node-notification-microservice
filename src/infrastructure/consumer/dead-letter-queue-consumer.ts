@@ -30,7 +30,7 @@ export class DeadLetterQueueConsumer implements IConsumer {
     // Connect to RabbitMQ
     const connection = await this._getConnection();
 
-    const channel = await connection.createChannel();
+    const channel = await connection!.createChannel();
 
     // Assert the DLQ Queue exists
     await channel.assertExchange(this._exchangeName, this._exchangeType, {
@@ -90,23 +90,31 @@ export class DeadLetterQueueConsumer implements IConsumer {
     process.on("SIGTERM", async () => {
       this._logger.logInfo("Received SIGTERM, shutting down gracefully");
       await channel.close();
-      await connection.close();
+      await connection!.close();
     });
 
     this._logger.logInfo("Dead Letter Queue Consumer running...🚀");
   }
 
   private async _getConnection() {
-    if (this._connection === null) {
-      this._connection = await connect({
-        hostname: this._rmqHostname,
-        port: Number(this._rmqPort) ?? 5672,
-        username: "guest",
-        password: "guest"
-      });
-    }
+    try {
+      if (this._connection === null) {
+        this._connection = await connect({
+          hostname: this._rmqHostname,
+          port: Number(this._rmqPort) ?? 5672,
+          username: "guest",
+          password: "guest"
+        });
+      }
 
-    return this._connection;
+      return this._connection;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          `DeadLetterQueueConsumer failed to connect to MQ. Reason: ${error.message}`
+        );
+      }
+    }
   }
 
   // Requeue the message back to the main notification queue with updated retry count
