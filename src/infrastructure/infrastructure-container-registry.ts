@@ -6,8 +6,6 @@ import { NotificationRepository } from "./repositories";
 import { INotificationRepository } from "@domain/notifications";
 import { Mediator } from "./mediator/mediator.js";
 import { IMediator } from "@shared-kernel/mediator-interface";
-import { IDateTimeProvider } from "@shared-kernel/date-time-provider-interface";
-import { DateTimeProvider } from "./time";
 import { NotificationPublisher } from "./publisher";
 import { DeadLetterQueueConsumer } from "./consumer/dead-letter-queue-consumer";
 
@@ -15,8 +13,6 @@ export function registerInfrastructureServices() {
   container.registerSingleton<IMediator>("Mediator", Mediator);
   container.registerSingleton<ILogger>("Logger", Logger);
   container.registerSingleton<ApplicationDbContext>("ApplicationDbContext", ApplicationDbContext);
-  container.registerSingleton<IDateTimeProvider>("DateTimeProvider", DateTimeProvider);
-
   container.register<INotificationRepository>("NotificationRepository", NotificationRepository, {
     lifecycle: Lifecycle.ResolutionScoped
   });
