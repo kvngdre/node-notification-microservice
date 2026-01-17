@@ -4,10 +4,10 @@ import {
   CreateNotificationRequest
 } from "@application/notifications/commands/create";
 import { BaseController } from "./base-controller";
-import { NotificationResponse } from "@application/notifications/notification-response";
+import { NotificationResponseDTO } from "@application/notifications/shared/notification-response-dto";
 import { GetNotificationByIdQuery } from "@application/notifications/queries/get-by-id";
-import { GetNotificationsQuery } from "@application/notifications/queries/get";
-import { DeleteNotificationByIdCommand } from "@application/notifications/commands/delete-by-id";
+import { GetNotificationsQuery } from "@application/notifications/queries/get-many";
+import { DeleteNotificationByIdCommand } from "@application/notifications/commands/delete";
 import {
   SendNotificationCommand,
   SendNotificationRequest
@@ -26,7 +26,7 @@ class NotificationsController extends BaseController {
       req.body.status
     );
 
-    const result = await this.mediator.send<NotificationResponse>(command);
+    const result = await this.mediator.send<NotificationResponseDTO>(command);
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
@@ -36,7 +36,7 @@ class NotificationsController extends BaseController {
   public getNotificationById = async (req: Request<{ notificationId: string }>, res: Response) => {
     const query = new GetNotificationByIdQuery(req.params.notificationId);
 
-    const result = await this.mediator.send<NotificationResponse>(query);
+    const result = await this.mediator.send<NotificationResponseDTO>(query);
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
@@ -59,7 +59,7 @@ class NotificationsController extends BaseController {
       req.query.status
     );
 
-    const result = await this.mediator.send<NotificationResponse>(query);
+    const result = await this.mediator.send<NotificationResponseDTO>(query);
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);

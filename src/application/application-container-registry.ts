@@ -4,11 +4,11 @@ import {
   CreateNotificationCommandValidator
 } from "./notifications/commands/create";
 import { GetNotificationByIdQueryHandler } from "./notifications/queries/get-by-id";
-import { GetNotificationsQueryHandler } from "./notifications/queries/get";
+import { GetNotificationsQueryHandler } from "./notifications/queries/get-many";
 import {
   DeleteNotificationByIdCommandHandler,
   DeleteNotificationByIdCommandValidator
-} from "./notifications/commands/delete-by-id";
+} from "./notifications/commands/delete";
 import {
   SendNotificationCommandHandler,
   SendNotificationCommandValidator

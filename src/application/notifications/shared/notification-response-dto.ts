@@ -1,6 +1,6 @@
 import { Notification } from "@domain/notifications";
 
-export class NotificationResponse {
+export class NotificationResponseDTO {
   private constructor(
     public readonly id: string,
     public readonly status: string,
@@ -12,7 +12,7 @@ export class NotificationResponse {
   ) {}
 
   public static from(notification: Notification) {
-    return new NotificationResponse(
+    return new NotificationResponseDTO(
       notification.id,
       notification.status,
       notification.channel,
@@ -26,7 +26,7 @@ export class NotificationResponse {
   public static fromMany(notifications: Notification[]) {
     return notifications.map(
       (n) =>
-        new NotificationResponse(
+        new NotificationResponseDTO(
           n.id,
           n.status,
           n.channel,

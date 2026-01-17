@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { CreateNotificationCommand } from "./create-notification-command";
-import { NotificationResponse } from "@application/notifications/notification-response";
+import { NotificationResponseDTO } from "@application/notifications/shared/notification-response-dto";
 import { Result, ResultType, AbstractValidator } from "@shared-kernel/index";
 import {
   INotificationRepository,
@@ -14,7 +14,7 @@ import { IRequestHandler } from "@shared-kernel/mediator";
 @injectable()
 export class CreateNotificationCommandHandler implements IRequestHandler<
   CreateNotificationCommand,
-  NotificationResponse
+  NotificationResponseDTO
 > {
   constructor(
     @inject("NotificationRepository")
@@ -25,7 +25,7 @@ export class CreateNotificationCommandHandler implements IRequestHandler<
 
   public async handle(
     command: CreateNotificationCommand
-  ): Promise<ResultType<NotificationResponse>> {
+  ): Promise<ResultType<NotificationResponseDTO>> {
     const { isFailure, exception, value } =
       this._createNotificationCommandValidator.validate(command);
 
@@ -42,6 +42,6 @@ export class CreateNotificationCommandHandler implements IRequestHandler<
 
     await this._notificationRepository.save(notification);
 
-    return Result.success("Notification created", NotificationResponse.from(notification));
+    return Result.success("Notification created", NotificationResponseDTO.from(notification));
   }
 }
