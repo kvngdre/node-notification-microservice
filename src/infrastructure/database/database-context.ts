@@ -1,15 +1,14 @@
+import { inject, injectable } from "inversify";
 import { DataSource } from "typeorm";
-import { singleton } from "tsyringe";
 import { Notification } from "@domain/notifications/notification-entity";
-import { Environment } from "@shared-kernel/environment";
-import { Logger } from "@infrastructure/logging/logger";
+import { Environment, ILogger } from "@shared-kernel/index";
 
-@singleton()
-export class ApplicationDbContext {
+@injectable()
+export class DatabaseContext {
   private readonly _dataSource: DataSource;
   private _connection: DataSource;
 
-  constructor(private readonly _logger: Logger) {
+  constructor(@inject("Logger") private readonly _logger: ILogger) {
     const connectionURI = process.env.DB_URI;
     if (!connectionURI) {
       throw new Error("No database connection URI provided");

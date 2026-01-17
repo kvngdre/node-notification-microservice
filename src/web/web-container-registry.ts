@@ -1,14 +1,26 @@
-import { container } from "tsyringe";
 import { AbstractErrorMiddleware, AbstractMiddleware } from "@web/abstractions/types";
 import { ErrorHandlingMiddleware } from "./middleware/error-handling-middleware";
 import { RequestLoggingMiddleware } from "./middleware/request-logging.middleware";
 import { ResourceNotFoundMiddleware } from "./middleware/resource-not-found-middleware";
+import container from "src/di-container";
+import GlobalErrorHandler, { IGlobalErrorHandler } from "./utils/global-error-handler";
 
 export function registerWebServices() {
-  container.registerSingleton<AbstractMiddleware>(RequestLoggingMiddleware);
-  container.registerSingleton<AbstractMiddleware>(ResourceNotFoundMiddleware);
-  container.registerSingleton<AbstractErrorMiddleware>(
-    "ErrorHandlingMiddleware",
-    ErrorHandlingMiddleware
-  );
+  container
+    .bind<AbstractMiddleware>("RequestLoggingMiddleware")
+    .to(RequestLoggingMiddleware)
+    .inSingletonScope();
+  container
+    .bind<AbstractMiddleware>("ResourceNotFoundMiddleware")
+    .to(ResourceNotFoundMiddleware)
+    .inSingletonScope();
+  container
+    .bind<AbstractErrorMiddleware>("ErrorHandlingMiddleware")
+    .to(ErrorHandlingMiddleware)
+    .inSingletonScope();
+
+  container
+    .bind<IGlobalErrorHandler>("GlobalErrorHandler")
+    .to(GlobalErrorHandler)
+    .inSingletonScope();
 }

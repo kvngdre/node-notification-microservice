@@ -1,10 +1,10 @@
 import { type Request, type Response, type NextFunction } from "express";
-import { singleton } from "tsyringe";
+import { injectable } from "inversify";
 import { AbstractMiddleware } from "@web/abstractions/types";
 import { Exception } from "@shared-kernel/exception";
 import { ApiResponse } from "@web/utils/api-response";
 
-@singleton()
+@injectable()
 export class ResourceNotFoundMiddleware extends AbstractMiddleware {
   public execute(req: Request, res: Response, next: NextFunction): void | Promise<void> {
     const exception = Exception.NotFound(

@@ -1,4 +1,4 @@
-import { inject, Lifecycle, scoped } from "tsyringe";
+import { inject, injectable } from "inversify";
 import { CreateNotificationCommand } from "./create-notification-command";
 import { NotificationResponse } from "@application/notifications/notification-response";
 import { Result, ResultType, AbstractValidator } from "@shared-kernel/index";
@@ -11,10 +11,11 @@ import {
 } from "@domain/notifications";
 import { IRequestHandler } from "@infrastructure/mediator";
 
-@scoped(Lifecycle.ResolutionScoped)
-export class CreateNotificationCommandHandler
-  implements IRequestHandler<CreateNotificationCommand, NotificationResponse>
-{
+@injectable()
+export class CreateNotificationCommandHandler implements IRequestHandler<
+  CreateNotificationCommand,
+  NotificationResponse
+> {
   constructor(
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository,

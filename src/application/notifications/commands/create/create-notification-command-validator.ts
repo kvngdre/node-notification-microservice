@@ -1,10 +1,10 @@
-import { Lifecycle, scoped } from "tsyringe";
 import { z } from "zod";
 import { AbstractValidator, ValidationResultType } from "@shared-kernel/abstract-validator";
 import { CreateNotificationCommand } from "./create-notification-command";
 import { NotificationChannel, NotificationStatus } from "@domain/notifications";
+import { injectable } from "inversify";
 
-@scoped(Lifecycle.ResolutionScoped)
+@injectable()
 export class CreateNotificationCommandValidator extends AbstractValidator<CreateNotificationCommand> {
   public validate(
     request: CreateNotificationCommand

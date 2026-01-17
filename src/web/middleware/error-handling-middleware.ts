@@ -1,13 +1,15 @@
 import { type Request, type Response, type NextFunction } from "express";
-import { Lifecycle, scoped } from "tsyringe";
+import { inject, injectable } from "inversify";
 import { AbstractErrorMiddleware } from "@web/abstractions/types/abstract-error-middleware";
 import { ApiResponse } from "@web/utils/api-response";
-import { GlobalErrorHandler } from "@web/utils/global-error-handler";
+import GlobalErrorHandler from "@web/utils/global-error-handler";
 import { Exception, ValidationException } from "@shared-kernel/index";
 
-@scoped(Lifecycle.ResolutionScoped)
+@injectable()
 export class ErrorHandlingMiddleware extends AbstractErrorMiddleware {
-  constructor(private readonly _globalErrorHandler: GlobalErrorHandler) {
+  constructor(
+    @inject("GlobalErrorHandler") private readonly _globalErrorHandler: GlobalErrorHandler
+  ) {
     super();
   }
 

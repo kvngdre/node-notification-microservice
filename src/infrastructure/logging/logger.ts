@@ -1,10 +1,10 @@
+import { injectable } from "inversify";
 import winston, { transports, createLogger, format, addColors } from "winston";
-import { singleton } from "tsyringe";
 import "winston-daily-rotate-file";
 import { Environment } from "@shared-kernel/environment";
-import { ILogger } from "@application/abstractions/logging/logger-interface";
+import { ILogger } from "@shared-kernel/logger-interface";
 
-@singleton()
+@injectable()
 export class Logger implements ILogger {
   private readonly _logger: winston.Logger;
   private readonly _colors: Record<string, string> = {

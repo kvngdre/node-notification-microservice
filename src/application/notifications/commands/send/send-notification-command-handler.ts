@@ -1,4 +1,4 @@
-import { inject, Lifecycle, scoped } from "tsyringe";
+import { inject, injectable } from "inversify";
 import { SendNotificationCommand } from "./send-notification-command";
 import { Result, ResultType } from "@shared-kernel/result";
 import { INotificationRepository } from "@domain/notifications/notification-repository-interface";
@@ -7,7 +7,7 @@ import { Notification } from "@domain/notifications";
 import { IPublisher } from "@application/abstractions/publisher";
 import { IRequestHandler } from "@infrastructure/mediator/request-handler-interface";
 
-@scoped(Lifecycle.ResolutionScoped)
+@injectable()
 export class SendNotificationCommandHandler implements IRequestHandler<SendNotificationCommand> {
   constructor(
     @inject("NotificationRepository")

@@ -1,10 +1,10 @@
-import { Lifecycle, scoped } from "tsyringe";
+import { injectable } from "inversify";
 import { z } from "zod";
 import { SendNotificationCommand } from "./send-notification-command";
 import { NotificationChannel } from "@domain/notifications";
 import { AbstractValidator, ValidationResultType } from "@shared-kernel/abstract-validator";
 
-@scoped(Lifecycle.ResolutionScoped)
+@injectable()
 export class SendNotificationCommandValidator extends AbstractValidator<SendNotificationCommand> {
   public validate(command: SendNotificationCommand): ValidationResultType<SendNotificationCommand> {
     const isBuffer = (value: unknown): value is Buffer => Buffer.isBuffer(value);

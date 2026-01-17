@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { container, singleton } from "tsyringe";
+import { inject, injectable } from "inversify";
 import { sync } from "glob";
 import path from "path";
-import { ResultType, IMediator } from "@shared-kernel/index";
+import container from "src/di-container";
+import { ResultType, IMediator, ILogger } from "@shared-kernel/index";
 import { IRequestHandler } from "./request-handler-interface";
 import { IRequest } from "./request-interface";
-import { Logger } from "@infrastructure/logging";
 
-@singleton()
+@injectable()
 export class Mediator implements IMediator {
   private _handlers: Map<string, IRequestHandler<IRequest, unknown>> = new Map();
 
-  constructor(private readonly _logger: Logger) {
+  constructor(@inject("Logger") private readonly _logger: ILogger) {
     this.registerHandler.bind(this);
 
     this._discoverAndRegisterHandlers();
@@ -56,9 +56,8 @@ export class Mediator implements IMediator {
 
         // Check if the handler class implements the IRequestHandler interface
         if (this._isRequestHandler(handlerClass)) {
-          // Resolve the handler instance using tsyringe container
-          const handlerInstance =
-            container.resolve<IRequestHandler<IRequest, unknown>>(handlerClass);
+          // Resolve the handler instance using DI container
+          const handlerInstance = container.get<IRequestHandler<IRequest, unknown>>(handlerClass);
 
           // Extract the request type from the handler (optional: based on naming convention or custom logic)
           const requestName = this._getRequestName(handlerClass);

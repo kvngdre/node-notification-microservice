@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { container } from "tsyringe";
 import { NotificationsController } from "@web/controllers/notifications-controller";
+import container from "src/di-container";
 
 const router = Router();
-const notificationController = container.resolve(NotificationsController);
+const notificationController = container.get<NotificationsController>(NotificationsController);
 
 router.post("/", notificationController.createNotification);
 router.post("/send", notificationController.sendNotification);

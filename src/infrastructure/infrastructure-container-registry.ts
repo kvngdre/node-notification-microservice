@@ -1,21 +1,29 @@
-import { container, Lifecycle } from "tsyringe";
+import container from "../di-container";
 import { Logger } from "./logging";
-import { ILogger } from "@application/abstractions/logging/logger-interface";
-import { ApplicationDbContext } from "./database/application-db-context";
+import { ILogger } from "@shared-kernel/logger-interface";
+import { DatabaseContext } from "./database/database-context";
 import { NotificationRepository } from "./repositories";
 import { INotificationRepository } from "@domain/notifications";
-import { Mediator } from "./mediator/mediator.js";
+import { Mediator } from "./mediator/mediator";
 import { IMediator } from "@shared-kernel/mediator-interface";
 import { NotificationPublisher } from "./publisher";
 import { DeadLetterQueueConsumer } from "./consumer/dead-letter-queue-consumer";
 
 export function registerInfrastructureServices() {
-  container.registerSingleton<IMediator>("Mediator", Mediator);
-  container.registerSingleton<ILogger>("Logger", Logger);
-  container.registerSingleton<ApplicationDbContext>("ApplicationDbContext", ApplicationDbContext);
-  container.register<INotificationRepository>("NotificationRepository", NotificationRepository, {
-    lifecycle: Lifecycle.ResolutionScoped
-  });
-  container.registerSingleton("NotificationPublisher", NotificationPublisher);
-  container.registerSingleton("DeadLetterQueueConsumer", DeadLetterQueueConsumer);
+  console.log("Registering Mediator...");
+  container.bind<IMediator>("Mediator").to(Mediator).inSingletonScope();
+  container.bind<ILogger>("Logger").to(Logger).inSingletonScope();
+  container.bind<DatabaseContext>("DatabaseContext").to(DatabaseContext).inSingletonScope();
+  container
+    .bind<INotificationRepository>("NotificationRepository")
+    .to(NotificationRepository)
+    .inRequestScope();
+  container
+    .bind<NotificationPublisher>("NotificationPublisher")
+    .to(NotificationPublisher)
+    .inSingletonScope();
+  container
+    .bind<DeadLetterQueueConsumer>("DeadLetterQueueConsumer")
+    .to(DeadLetterQueueConsumer)
+    .inSingletonScope();
 }

@@ -1,13 +1,12 @@
-import { inject, singleton } from "tsyringe";
+import { inject, injectable } from "inversify";
 import { Channel, connect, Connection, ConsumeMessage } from "amqplib";
 import { IConsumer } from "@application/abstractions/consumer/consumer-interface";
 import { INotificationRepository } from "@domain/notifications/notification-repository-interface";
-import { ILogger } from "@application/abstractions/logging";
+import { ILogger } from "@shared-kernel/logger-interface";
 import { Notification, NotificationStatus } from "@domain/notifications";
 import { Environment } from "@shared-kernel/environment";
-import { IDateTimeProvider } from "@shared-kernel/date-time-provider-interface";
 
-@singleton()
+@injectable()
 export class DeadLetterQueueConsumer implements IConsumer {
   private readonly _exchangeName = process.env.RMQ_EXCHANGE_NAME || "notification_events";
   private readonly _exchangeType = process.env.RMQ_EXCHANGE_TYPE || "direct";
@@ -22,8 +21,7 @@ export class DeadLetterQueueConsumer implements IConsumer {
   constructor(
     @inject("Logger") private readonly _logger: ILogger,
     @inject("NotificationRepository")
-    private readonly _notificationRepository: INotificationRepository,
-    @inject("DateTimeProvider") private readonly _dateTimeProvider: IDateTimeProvider
+    private readonly _notificationRepository: INotificationRepository
   ) {}
 
   public async consume(): Promise<void> {
@@ -54,7 +52,7 @@ export class DeadLetterQueueConsumer implements IConsumer {
 
           // Update database with retry attempt
           notification.retryCount += 1;
-          notification.updatedAt = this._dateTimeProvider.utcNow();
+          notification.updatedAt = new Date();
           await this._notificationRepository.save(notification);
 
           if (notification.retryCount < this._retryLimit) {
@@ -65,7 +63,7 @@ export class DeadLetterQueueConsumer implements IConsumer {
           } else {
             // If retry limit is reached, mark the message as permanently failed
             notification.status = NotificationStatus.FAILED;
-            notification.updatedAt = this._dateTimeProvider.utcNow();
+            notification.updatedAt = new Date();
             await this._notificationRepository.save(notification);
 
             this._logger.logDebug("Notification marked as failure");

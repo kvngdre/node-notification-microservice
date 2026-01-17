@@ -1,5 +1,5 @@
 import { type Request, type Response } from "express";
-import { Lifecycle, scoped } from "tsyringe";
+import { injectable } from "inversify";
 import {
   CreateNotificationCommand,
   CreateNotificationRequest
@@ -14,9 +14,8 @@ import {
   SendNotificationRequest
 } from "@application/notifications/commands/send";
 
-@scoped(Lifecycle.ResolutionScoped)
+@injectable()
 export class NotificationsController extends BaseController {
-
   /** Handles the creation of a new notification. */
   public createNotification = async (
     req: Request<object, object, CreateNotificationRequest>,
@@ -91,17 +90,7 @@ export class NotificationsController extends BaseController {
   ) => {
     const command = new SendNotificationCommand(req.body.channel, req.body.data);
 
-
-
-
-
-
-
-
-                        const result = await this.mediator.send(
-                          
-                          
-                          command);
+    const result = await this.mediator.send(command);
 
     const { code, payload } = this.buildHttpResponse(result, res);
 

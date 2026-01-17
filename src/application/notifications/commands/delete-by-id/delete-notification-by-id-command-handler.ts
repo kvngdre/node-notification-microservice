@@ -1,13 +1,11 @@
-import { inject, Lifecycle, scoped } from "tsyringe";
 import { DeleteNotificationByIdCommand } from "./delete-notification-by-id-command";
 import { Result, ResultType } from "@shared-kernel/result";
 import { INotificationRepository, NotificationExceptions } from "@domain/notifications";
 import { IRequestHandler } from "@infrastructure/mediator/request-handler-interface";
+import { inject, injectable } from "inversify";
 
-@scoped(Lifecycle.ResolutionScoped)
-export class DeleteNotificationByIdCommandHandler
-  implements IRequestHandler<DeleteNotificationByIdCommand>
-{
+@injectable()
+export class DeleteNotificationByIdCommandHandler implements IRequestHandler<DeleteNotificationByIdCommand> {
   constructor(
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository

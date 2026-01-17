@@ -6,12 +6,11 @@
   "directories": {
     "test": "test"
   },
-  "engine": {
+  "engines": {
     "node": ">=22"
   },
-  "type": "module",
   "scripts": {
-    "build": "rimraf dist && tsc && tsc-alias -p tsconfig.build.json",
+    "build": "rimraf dist && tsc && tsc-alias",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "lint": "eslint --ext .ts,.js .",
     "migrations:create": "npx ts-node ./src/infrastructure/database/scripts/create-migration-file-script.ts",
@@ -57,6 +56,7 @@
     "express": "^4.19.2",
     "express-async-errors": "^3.1.1",
     "helmet": "^7.1.0",
+    "inversify": "^7.11.0",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "pg": "^8.12.0",
@@ -92,7 +92,6 @@
     "rimraf": "^6.0.1",
     "tsc-alias": "^1.8.10",
     "tsx": "^4.21.0",
-    "tsyringe": "^4.8.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.53.0"
   }

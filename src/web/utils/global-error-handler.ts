@@ -1,12 +1,12 @@
-import { singleton } from "tsyringe";
-import { Logger } from "@infrastructure/logging/logger";
+import { inject, injectable } from "inversify";
+import { ILogger } from "@shared-kernel/logger-interface";
 
 export interface IGlobalErrorHandler {
   handle(error: Error): Promise<void>;
 }
-@singleton()
+@injectable()
 export default class GlobalErrorHandler implements IGlobalErrorHandler {
-  constructor(private readonly _logger: Logger) {}
+  constructor(@inject("Logger") private readonly _logger: ILogger) {}
 
   public async handle(error: Error): Promise<void> {
     this._logger.logError(error.message, error.stack);

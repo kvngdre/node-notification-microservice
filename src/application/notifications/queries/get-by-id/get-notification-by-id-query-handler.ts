@@ -1,14 +1,15 @@
-import { inject, Lifecycle, scoped } from "tsyringe";
+import { inject, injectable } from "inversify";
 import { GetNotificationByIdQuery } from "./get-notification-by-id-query";
 import { NotificationResponse } from "@application/notifications/notification-response";
 import { Result, ResultType } from "@shared-kernel/result";
 import { INotificationRepository, NotificationExceptions } from "@domain/notifications";
 import { IRequestHandler } from "@infrastructure/mediator/request-handler-interface";
 
-@scoped(Lifecycle.ResolutionScoped)
-export class GetNotificationByIdQueryHandler
-  implements IRequestHandler<GetNotificationByIdQuery, NotificationResponse>
-{
+@injectable()
+export class GetNotificationByIdQueryHandler implements IRequestHandler<
+  GetNotificationByIdQuery,
+  NotificationResponse
+> {
   constructor(
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository

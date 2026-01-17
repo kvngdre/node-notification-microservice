@@ -3,7 +3,6 @@ import { type IWebAppOptions } from "./abstractions/interfaces";
 import express, { json, urlencoded, type Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
-import { container } from "tsyringe";
 import { Environment } from "src/shared-kernel";
 import {
   ErrorHandlingMiddleware,
@@ -12,8 +11,9 @@ import {
 } from "./middleware";
 import { apiRouter } from "./routers/api-router";
 import { AbstractErrorMiddleware, AbstractMiddleware } from "./abstractions/types";
-import { ILogger } from "@application/abstractions/logging/logger-interface";
+import { ILogger } from "@shared-kernel/logger-interface";
 import { IGlobalErrorHandler } from "./utils/global-error-handler";
+import container from "src/di-container";
 
 /**
  * WebApp class responsible for configuring and running the Express.js server.
@@ -39,10 +39,10 @@ export default class WebApp {
   constructor(options: IWebAppOptions) {
     try {
       // Resolve middleware dependencies from DI container
-      this._requestLoggingMiddleware = container.resolve(RequestLoggingMiddleware);
-      this._resourceNotFoundMiddleware = container.resolve(ResourceNotFoundMiddleware);
-      this._errorHandlingMiddleware = container.resolve(ErrorHandlingMiddleware);
-      this._logger = container.resolve("Logger");
+      this._requestLoggingMiddleware = container.get(RequestLoggingMiddleware);
+      this._resourceNotFoundMiddleware = container.get(ResourceNotFoundMiddleware);
+      this._errorHandlingMiddleware = container.get(ErrorHandlingMiddleware);
+      this._logger = container.get("Logger");
     } catch (error) {
       throw new Error(`DI container resolution failed: ${error}`);
     }
@@ -121,7 +121,7 @@ export default class WebApp {
    * Must be called after server is created to ensure proper cleanup.
    */
   private registerProcessListeners(): void {
-    const errorHandler = container.resolve<IGlobalErrorHandler>("GlobalErrorHandler");
+    const errorHandler = container.get<IGlobalErrorHandler>("GlobalErrorHandler");
 
     process.on("uncaughtException", (error: Error) => {
       this._logger.logError("Uncaught Exception:", error);
