@@ -14,7 +14,7 @@ import { apiRouter } from "./routers/api-router";
 import { AbstractErrorMiddleware, AbstractMiddleware } from "./abstractions/types";
 import { ILogger } from "@application/abstractions/logging/logger-interface";
 
-export default class Webapp {
+export default class WebApp {
   private readonly _app: Express = express();
   private _server: Server | null = null;
   private _options: IWebAppOptions = { port: 3000 };

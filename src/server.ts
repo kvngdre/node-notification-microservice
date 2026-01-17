@@ -3,8 +3,8 @@ import "express-async-errors";
 import "dotenv/config";
 import { container } from "tsyringe";
 import { registerServices } from "./dependency-injection";
-import Webapp from "./webapp";
-import { GlobalErrorHandler } from "./utils/global-error-handler";
+import WebApp from "./web/web-app";
+import { GlobalErrorHandler } from "./web/utils/global-error-handler";
 import { ApplicationDbContext } from "@infrastructure/database/application-db-context";
 import { Server } from "http";
 // import { DeadLetterQueueConsumer } from "@infrastructure/consumer";
@@ -18,7 +18,7 @@ async function startup() {
 
   // await container.resolve(DeadLetterQueueConsumer).consume();
 
-  const app = new Webapp({
+  const app = new WebApp({
     port: Number(process.env.PORT)
   });
 

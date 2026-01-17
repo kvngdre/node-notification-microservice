@@ -2,7 +2,7 @@
   "name": "notification-microservice",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/src/web/server.js",
+  "main": "dist/src/server.js",
   "directories": {
     "test": "test"
   },
@@ -16,7 +16,7 @@
     "lint": "eslint --ext .ts,.js .",
     "migrations:create": "npx ts-node ./src/infrastructure/database/scripts/create-migration-file-script.ts",
     "prepare": "husky",
-    "start": "node dist/src/web/server.js",
+    "start": "node dist/src/server.js",
     "start:dev": "nodemon",
     "test": "echo \"Error: no test specified\""
   },
@@ -36,7 +36,7 @@
       "dist/**/*",
       "coverage/**/*"
     ],
-    "exec": "tsx watch ./src/web/server.ts",
+    "exec": "tsx watch ./src/server.ts",
     "env": {
       "NODE_ENV": "development"
     },
