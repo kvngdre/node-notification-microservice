@@ -16,6 +16,8 @@ import {
 
 @scoped(Lifecycle.ResolutionScoped)
 export class NotificationsController extends BaseController {
+
+  /** Handles the creation of a new notification. */
   public createNotification = async (
     req: Request<object, object, CreateNotificationRequest>,
     res: Response
