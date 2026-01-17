@@ -27,7 +27,6 @@ export class NotificationPublisher implements IPublisher<Notification> {
       await this._assertExchangeAndQueue(channel);
 
       this._logger.logDebug("Publishing message...");
-
       channel.publish(this._exchangeName, this._routingKey, this._serializeData(data), {
         persistent: Environment.isProduction
       });
