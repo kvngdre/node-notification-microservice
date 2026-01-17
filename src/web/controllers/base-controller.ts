@@ -1,12 +1,12 @@
 import { type Response } from "express";
 import { container } from "tsyringe";
-import { Mediator } from "@infrastructure/mediator/mediator";
 import { ResultType } from "@shared-kernel/result";
-import { ApiResponse } from "@web/infrastructure/api-response";
-import { HttpStatus } from "@web/infrastructure/http-status";
+import { ApiResponse } from "@web/utils/api-response";
+import { HttpStatus } from "@web/utils/http-status";
+import { IMediator } from "@shared-kernel/mediator-interface";
 
 export abstract class BaseController {
-  protected readonly mediator = container.resolve(Mediator);
+  // protected readonly mediator: IMediator = container.resolve("Mediator");
 
   constructor() {
     // this.mediator.registerHandlers();

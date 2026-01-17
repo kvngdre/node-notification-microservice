@@ -1,59 +1,73 @@
+import { type Server } from "http";
+import { type IWebAppOptions } from "./abstractions/interfaces";
 import express, { json, urlencoded, type Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import { container } from "tsyringe";
 import { Environment } from "src/shared-kernel";
-import { IWebAppOptions } from "./abstractions/interfaces";
 import {
   ErrorHandlingMiddleware,
   RequestLoggingMiddleware,
   ResourceNotFoundMiddleware
 } from "./middleware";
-import { Logger } from "@infrastructure/logging/logger";
 import { apiRouter } from "./routers/api-router";
+import { AbstractErrorMiddleware, AbstractMiddleware } from "./abstractions/types";
+import { ILogger } from "@application/abstractions/logging/logger-interface";
 
 export default class Webapp {
-  private readonly _options: IWebAppOptions;
   private readonly _app: Express = express();
-  private readonly _requestLoggingMiddleware = container.resolve(RequestLoggingMiddleware);
-  private readonly _resourceNotFoundMiddleware = container.resolve(ResourceNotFoundMiddleware);
-  private readonly _errorHandlingMiddleware = container.resolve(ErrorHandlingMiddleware);
-  private readonly _logger: Logger = container.resolve(Logger);
+  private _server: Server | null = null;
+  private _options: IWebAppOptions = { port: 3000 };
+
+  private readonly _requestLoggingMiddleware: AbstractMiddleware;
+  private readonly _resourceNotFoundMiddleware: AbstractMiddleware;
+  private readonly _errorHandlingMiddleware: AbstractErrorMiddleware;
+  private readonly _logger: ILogger;
 
   constructor(options: IWebAppOptions) {
-    this._parsePortNumberOrThrow(options.port);
+    try {
+      this._requestLoggingMiddleware = container.resolve(RequestLoggingMiddleware);
+      this._resourceNotFoundMiddleware = container.resolve(ResourceNotFoundMiddleware);
+      this._errorHandlingMiddleware = container.resolve(ErrorHandlingMiddleware);
+      this._logger = container.resolve("Logger");
+    } catch (error) {
+      throw new Error(`DI container resolution failed: ${error}`);
+    }
 
-    this._options = options;
-    this._setup();
+    this.setOptions(options);
   }
 
   public getOptions(): IWebAppOptions {
     return this._options;
   }
 
-  /**
-   * Configure the options for the web application instance.
-   * @param key The option to be set.
-   * @param value The value of the option.
-   */
-  public setOption<K extends keyof IWebAppOptions>(key: K, value: IWebAppOptions[K]): void {
-    if (key === "port") {
-      this._parsePortNumberOrThrow(value as string | number);
-    }
+  public setOptions(options: Partial<IWebAppOptions>): void {
+    this._parsePortNumberOrThrow(options.port ?? this._options?.port);
 
-    this._options[key] = value;
+    this._options = { ...this._options, ...options };
   }
 
   public run(): void {
-    const port = this._options.port;
+    try {
+      const port = this._options.port;
+      this._setup();
 
-    this._app.listen(port, () => {
-      this._logger.logInfo(`Server running on port: [${port}]`);
+      this._server = this._app.listen(port, () => {
+        this._logger.logInfo(`Server running on port: [${port}]`);
 
-      if (Environment.isDevelopment) {
-        this._logger.logInfo(`http://localhost:${port}/api/v1`);
-      }
-    });
+        if (Environment.isDevelopment) {
+          this._logger.logInfo(`http://localhost:${port}/api/v1`);
+        }
+      });
+
+      this._server.on("error", (error) => {
+        this._logger.logError("Server error:", error);
+        throw error;
+      });
+    } catch (error) {
+      this._logger.logError("Failed to start server:", error);
+      throw error;
+    }
   }
 
   private _setup(): void {
@@ -72,10 +86,9 @@ export default class Webapp {
   }
 
   private _parsePortNumberOrThrow(value: number | string) {
-    const result = Number.parseInt(value as string);
-
-    if (isNaN(result)) {
-      throw new Error("Server port number is invalid or not set.");
+    const port = Number(value);
+    if (!Number.isInteger(port) || port < 1 || port > 65535) {
+      throw new Error(`Invalid port: ${value}. Must be 1-65535`);
     }
   }
 }

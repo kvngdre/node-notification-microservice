@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from "express";
 import morgan, { token } from "morgan";
 import { singleton } from "tsyringe";
-import { AbstractMiddleware } from "@web/abstractions/types/abstract-middleware.shared";
+import { AbstractMiddleware } from "@web/abstractions/types/abstract-middleware";
 import { Environment } from "src/shared-kernel";
 import { Logger } from "@infrastructure/logging/logger";
 

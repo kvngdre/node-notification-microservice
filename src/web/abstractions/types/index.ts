@@ -1,2 +1,2 @@
-export * from "./abstract-error-middleware.shared";
-export * from "./abstract-middleware.shared";
+export * from "./abstract-error-middleware";
+export * from "./abstract-middleware";

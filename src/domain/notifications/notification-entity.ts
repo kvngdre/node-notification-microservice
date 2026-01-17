@@ -28,17 +28,20 @@ export class Notification {
 
   @Column({
     name: "retry_count",
-    default: 0
+    default: 0,
+    type: "int4"
   })
   public retryCount: number;
 
   @Column({
-    name: "created_at"
+    name: "created_at",
+    type: "timestamp with time zone"
   })
   public createdAt: Date;
 
   @Column({
-    name: "updated_at"
+    name: "updated_at",
+    type: "timestamp with time zone"
   })
   public updatedAt: Date;
 
