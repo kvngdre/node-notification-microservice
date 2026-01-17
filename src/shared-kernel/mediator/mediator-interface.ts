@@ -1,4 +1,4 @@
-import { IRequest, IRequestHandler } from "@infrastructure/mediator";
+import { IRequest, IRequestHandler } from "@shared-kernel/mediator";
 import { ResultType } from "@shared-kernel/result";
 
 export interface IMediator {

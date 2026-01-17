@@ -5,7 +5,7 @@ import { INotificationRepository } from "@domain/notifications/notification-repo
 import { AbstractValidator } from "@shared-kernel/abstract-validator";
 import { Notification } from "@domain/notifications";
 import { IPublisher } from "@application/abstractions/publisher";
-import { IRequestHandler } from "@infrastructure/mediator/request-handler-interface";
+import { IRequestHandler } from "@shared-kernel/mediator/request-handler-interface";
 
 @injectable()
 export class SendNotificationCommandHandler implements IRequestHandler<SendNotificationCommand> {

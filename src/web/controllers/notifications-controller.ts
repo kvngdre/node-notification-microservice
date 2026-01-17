@@ -1,5 +1,4 @@
 import { type Request, type Response } from "express";
-import { injectable } from "inversify";
 import {
   CreateNotificationCommand,
   CreateNotificationRequest
@@ -14,8 +13,7 @@ import {
   SendNotificationRequest
 } from "@application/notifications/commands/send";
 
-@injectable()
-export class NotificationsController extends BaseController {
+class NotificationsController extends BaseController {
   /** Handles the creation of a new notification. */
   public createNotification = async (
     req: Request<object, object, CreateNotificationRequest>,
@@ -29,7 +27,6 @@ export class NotificationsController extends BaseController {
     );
 
     const result = await this.mediator.send<NotificationResponse>(command);
-
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
@@ -40,7 +37,6 @@ export class NotificationsController extends BaseController {
     const query = new GetNotificationByIdQuery(req.params.notificationId);
 
     const result = await this.mediator.send<NotificationResponse>(query);
-
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
@@ -64,7 +60,6 @@ export class NotificationsController extends BaseController {
     );
 
     const result = await this.mediator.send<NotificationResponse>(query);
-
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
@@ -91,9 +86,10 @@ export class NotificationsController extends BaseController {
     const command = new SendNotificationCommand(req.body.channel, req.body.data);
 
     const result = await this.mediator.send(command);
-
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
   };
 }
+
+export default new NotificationsController();

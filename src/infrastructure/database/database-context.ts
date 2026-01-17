@@ -29,7 +29,9 @@ export class DatabaseContext {
       this._connection = await this._dataSource.initialize();
 
       if (this._connection.isInitialized) {
-        this._logger.logInfo("Connected to database");
+        Environment.isProduction
+          ? console.log("Connected to database")
+          : this._logger.logInfo("Connected to database");
       }
     } catch (error: unknown) {
       if (error instanceof Error) {

@@ -3,17 +3,17 @@ import { inject, injectable } from "inversify";
 import { sync } from "glob";
 import path from "path";
 import container from "src/di-container";
-import { ResultType, IMediator, ILogger } from "@shared-kernel/index";
+import { ResultType, ILogger } from "@shared-kernel/index";
 import { IRequestHandler } from "./request-handler-interface";
 import { IRequest } from "./request-interface";
+import { IMediator } from "./mediator-interface";
 
 @injectable()
-export class Mediator implements IMediator {
+export default class Mediator implements IMediator {
   private _handlers: Map<string, IRequestHandler<IRequest, unknown>> = new Map();
 
   constructor(@inject("Logger") private readonly _logger: ILogger) {
     this.registerHandler.bind(this);
-
     this._discoverAndRegisterHandlers();
   }
 

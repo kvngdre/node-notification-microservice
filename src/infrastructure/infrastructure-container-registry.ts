@@ -4,13 +4,11 @@ import { ILogger } from "@shared-kernel/logger-interface";
 import { DatabaseContext } from "./database/database-context";
 import { NotificationRepository } from "./repositories";
 import { INotificationRepository } from "@domain/notifications";
-import { Mediator } from "./mediator/mediator";
-import { IMediator } from "@shared-kernel/mediator-interface";
 import { NotificationPublisher } from "./publisher";
 import { DeadLetterQueueConsumer } from "./consumer/dead-letter-queue-consumer";
+import Mediator, { IMediator } from "@shared-kernel/mediator";
 
 export function registerInfrastructureServices() {
-  console.log("Registering Mediator...");
   container.bind<IMediator>("Mediator").to(Mediator).inSingletonScope();
   container.bind<ILogger>("Logger").to(Logger).inSingletonScope();
   container.bind<DatabaseContext>("DatabaseContext").to(DatabaseContext).inSingletonScope();

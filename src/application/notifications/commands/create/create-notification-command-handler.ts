@@ -9,7 +9,7 @@ import {
   // NotificationExceptions,
   NotificationStatus
 } from "@domain/notifications";
-import { IRequestHandler } from "@infrastructure/mediator";
+import { IRequestHandler } from "@shared-kernel/mediator";
 
 @injectable()
 export class CreateNotificationCommandHandler implements IRequestHandler<

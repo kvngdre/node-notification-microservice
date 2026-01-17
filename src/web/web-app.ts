@@ -4,11 +4,6 @@ import express, { json, urlencoded, type Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import { Environment } from "src/shared-kernel";
-import {
-  ErrorHandlingMiddleware,
-  RequestLoggingMiddleware,
-  ResourceNotFoundMiddleware
-} from "./middleware";
 import { apiRouter } from "./routers/api-router";
 import { AbstractErrorMiddleware, AbstractMiddleware } from "./abstractions/types";
 import { ILogger } from "@shared-kernel/logger-interface";
@@ -39,9 +34,9 @@ export default class WebApp {
   constructor(options: IWebAppOptions) {
     try {
       // Resolve middleware dependencies from DI container
-      this._requestLoggingMiddleware = container.get(RequestLoggingMiddleware);
-      this._resourceNotFoundMiddleware = container.get(ResourceNotFoundMiddleware);
-      this._errorHandlingMiddleware = container.get(ErrorHandlingMiddleware);
+      this._requestLoggingMiddleware = container.get("RequestLoggingMiddleware");
+      this._resourceNotFoundMiddleware = container.get("ResourceNotFoundMiddleware");
+      this._errorHandlingMiddleware = container.get("ErrorHandlingMiddleware");
       this._logger = container.get("Logger");
     } catch (error) {
       throw new Error(`DI container resolution failed: ${error}`);
@@ -95,10 +90,11 @@ export default class WebApp {
 
       // Start HTTP server
       this._server = this._app.listen(this._options.port, () => {
-        this._logger.logInfo(`Server running on port: [${this._options.port}]`);
-
         if (Environment.isDevelopment) {
-          this._logger.logInfo(`http://localhost:${this._options.port}/api/v1`);
+          this._logger.logDebug(`Server running on port: ${this._options.port}`);
+          this._logger.logInfo(`API docs: http://localhost:${this._options.port}/api/v1`);
+        } else {
+          console.log(`Server running on port: [${this._options.port}]`);
         }
       });
 

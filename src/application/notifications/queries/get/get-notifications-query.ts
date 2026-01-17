@@ -1,4 +1,4 @@
-import { IRequest } from "@infrastructure/mediator/request-interface";
+import { IRequest } from "@shared-kernel/mediator/request-interface";
 
 export class GetNotificationsQuery implements IRequest {
   constructor(
