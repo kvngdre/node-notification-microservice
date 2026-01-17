@@ -36,6 +36,7 @@ export class NotificationsController extends BaseController {
     return res.status(code).json(payload);
   };
 
+  /** Handles retrieving a notification by its ID. */
   public getNotificationById = async (req: Request<{ notificationId: string }>, res: Response) => {
     const query = new GetNotificationByIdQuery(req.params.notificationId);
 
@@ -46,6 +47,7 @@ export class NotificationsController extends BaseController {
     return res.status(code).json(payload);
   };
 
+  /** Handles retrieving a list of notifications with optional filters. */
   public getNotifications = async (
     req: Request<
       object,
@@ -69,6 +71,7 @@ export class NotificationsController extends BaseController {
     return res.status(code).json(payload);
   };
 
+  /** Handles the deletion of a notification by its ID. */
   public deleteNotificationById = async (
     req: Request<{ notificationId: string }>,
     res: Response
@@ -76,12 +79,12 @@ export class NotificationsController extends BaseController {
     const command = new DeleteNotificationByIdCommand(req.params.notificationId);
 
     const result = await this.mediator.send(command);
-
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
   };
 
+  /** Handles sending a notification through the specified channel. */
   public sendNotification = async (
     req: Request<object, object, SendNotificationRequest>,
     res: Response
