@@ -91,6 +91,9 @@ export class NotificationsController extends BaseController {
   ) => {
     const command = new SendNotificationCommand(req.body.channel, req.body.data);
 
+
+
+    
     const result = await this.mediator.send(command);
 
     const { code, payload } = this.buildHttpResponse(result, res);
