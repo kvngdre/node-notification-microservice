@@ -12,10 +12,7 @@ export abstract class BaseController {
     // this.mediator.registerHandlers();
   }
 
-  protected buildHttpResponse<TValue, TS extends boolean>(
-    result: ResultType<TValue>,
-    res: Response
-  ) {
+  protected buildHttpResponse<TValue>(result: ResultType<TValue>, res: Response) {
     const code = result.isSuccess
       ? HttpStatus.OK
       : HttpStatus.mapExceptionToHttpStatus(result.exception);

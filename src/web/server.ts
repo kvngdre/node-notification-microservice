@@ -6,7 +6,7 @@ import { registerServices } from "./dependency-injection";
 import Webapp from "./webapp";
 import { GlobalErrorHandler } from "./infrastructure/global-error-handler";
 import { ApplicationDbContext } from "@infrastructure/database/application-db-context";
-import { DeadLetterQueueConsumer } from "@infrastructure/consumer";
+// import { DeadLetterQueueConsumer } from "@infrastructure/consumer";
 
 async function startup() {
   registerServices();
@@ -15,7 +15,7 @@ async function startup() {
 
   await container.resolve(ApplicationDbContext).connect();
 
-  await container.resolve(DeadLetterQueueConsumer).consume();
+  // await container.resolve(DeadLetterQueueConsumer).consume();
 
   const app = new Webapp({
     port: Number(process.env.PORT)

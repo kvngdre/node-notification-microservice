@@ -47,7 +47,7 @@ export class Mediator implements IMediator {
     for (const file of handlerFiles) {
       // Dynamically import the handler file
       const filePath = path.resolve(file);
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+
       const handlerModule = await import(filePath);
 
       // Iterate over the module's exports to find the handler class

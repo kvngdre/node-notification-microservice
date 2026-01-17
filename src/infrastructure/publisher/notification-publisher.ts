@@ -13,7 +13,7 @@ export class NotificationPublisher implements IPublisher<Notification> {
   private readonly _queue = process.env.RMQ_MAIN_QUEUE_NAME || "send_notification_queue";
   private readonly _dlqRoutingKey = process.env.RMQ_DLQ_ROUTING_KEY || "failed_notification";
   private readonly _rmqHostname = process.env.RMQ_HOST || "localhost";
-  private readonly _rmqPort = process.env.RMQ_PORT || 5672;
+  private readonly _rmqPort = parseInt(process.env.RMQ_PORT) || 5672;
   private _connection: Connection | null = null;
 
   constructor(private readonly _logger: Logger) {}
