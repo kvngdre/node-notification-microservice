@@ -1,6 +1,6 @@
 {
   "include": ["src/**/*", "./env.d.ts"],
-  "exclude": ["node_modules", "dist", "coverage"],
+  "exclude": ["node_modules", "dist", "coverage", ".husky"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
@@ -29,8 +29,8 @@
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
 
     /* Modules */
-    "module": "CommonJS" /* Specify what module code is generated. */,
-    "rootDir": "./" /* Specify the root folder within your source files. */,
+    "module": "es2022" /* Specify what module code is generated. */,
+    // "rootDir": "./" /* Specify the root folder within your source files. */,
     "moduleResolution": "Node" /* Specify how TypeScript looks up a file from a given module specifier. */,
     "baseUrl": "." /* Specify the base directory to resolve non-relative module names. */,
     "paths": {
@@ -115,11 +115,5 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
-  },
-  "ts-node": {
-    "esm": false,
-    "experimentalSpecifierResolution": "node",
-    "transpileOnly": true,
-    "require": ["tsconfig-paths/register"]
   }
 }

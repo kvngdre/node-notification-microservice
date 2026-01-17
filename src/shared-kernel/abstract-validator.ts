@@ -1,4 +1,4 @@
-import _, { isUndefined } from "lodash";
+import _ from "lodash";
 import { z } from "zod";
 import { ValidationException } from "./validation-exception";
 
@@ -12,7 +12,7 @@ export abstract class AbstractValidator<TRequest extends object> {
       return {
         isSuccess: result.success,
         isFailure: !result.success,
-        value: _.omitBy(result.data, isUndefined) as TRequest
+        value: _.omitBy(result.data, _.isUndefined) as TRequest
       };
     }
     return {
