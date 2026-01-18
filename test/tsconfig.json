@@ -1,0 +1,21 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "..",
+    "rootDir": "..",
+    "outDir": "../dist-test",
+    "paths": {
+      "@domain/*": ["src/domain/*"],
+      "@application/*": ["src/application/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@shared-kernel/*": ["src/shared-kernel/*"],
+      "@web/*": ["src/web/*"],
+      "@test/*": ["test/*"]
+    },
+    "types": ["vitest/globals", "node"],
+    "moduleResolution": "bundler",
+    "noEmit": true
+  },
+  "include": ["./**/*", "../src/**/*"],
+  "exclude": ["../node_modules", "../dist", "../dist-test"]
+}

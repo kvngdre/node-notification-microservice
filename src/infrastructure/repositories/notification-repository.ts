@@ -10,13 +10,30 @@ export class NotificationRepository implements INotificationRepository {
     return this._dbContext.notifications.save(notification);
   }
 
-  public async find(query: object = {}): Promise<Array<Notification>> {
-    console.log(query);
-    return this._dbContext.notifications
+  public async find(query: any = {}): Promise<Array<Notification>> {
+    const queryBuilder = this._dbContext.notifications
       .createQueryBuilder("notification")
-      .where({})
-      .orderBy({ created_at: "DESC" })
-      .getMany();
+      .orderBy("notification.created_at", "DESC");
+
+    // Apply filters if provided
+    if (query.channel) {
+      queryBuilder.andWhere("notification.channel = :channel", { channel: query.channel });
+    }
+
+    if (query.status) {
+      queryBuilder.andWhere("notification.status = :status", { status: query.status });
+    }
+
+    // Apply pagination if provided
+    if (query.limit) {
+      queryBuilder.limit(query.limit);
+    }
+
+    if (query.offset) {
+      queryBuilder.offset(query.offset);
+    }
+
+    return queryBuilder.getMany();
   }
 
   public async findById(id: string): Promise<Notification | null> {
