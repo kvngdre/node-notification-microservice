@@ -18,9 +18,14 @@ export default class DatabaseContext {
       type: "postgres",
       url: connectionURI,
       connectTimeoutMS: Environment.isDevelopment ? 10_000 : 60_000,
-      entities: ["**src/**/*-entity.{ts,js}"],
-      migrations: ["**/migrations/*.{ts,js}"],
-      synchronize: true
+      entities: Environment.isDevelopment
+        ? ["src/domain/**/*-entity.ts"]
+        : ["dist/domain/**/*-entity.js"],
+      migrations: Environment.isDevelopment
+        ? ["src/infrastructure/database/migrations/*.ts"]
+        : ["dist/infrastructure/database/migrations/*.js"],
+      synchronize: Environment.isDevelopment,
+      logging: Environment.isDevelopment ? ["query", "error"] : ["error"]
     });
   }
 

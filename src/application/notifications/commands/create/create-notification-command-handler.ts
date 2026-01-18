@@ -14,7 +14,7 @@ export class CreateNotificationCommandHandler implements IRequestHandler<
   constructor(
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository,
-    @inject("CreateNotificationCommandValidator")
+    @inject(CreateNotificationCommandValidator)
     private readonly _validator: CreateNotificationCommandValidator
   ) {}
 

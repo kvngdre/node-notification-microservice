@@ -37,6 +37,6 @@ export default defineConfig([
     extends: ["markdown/recommended"]
   },
   {
-    ignores: ["node_modules/", "dist/", "coverage/"]
+    ignores: ["node_modules/", "dist/", "coverage/", "tsconfig.json", "eslint.config.mts"]
   }
 ]);

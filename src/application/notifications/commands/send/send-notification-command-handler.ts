@@ -14,7 +14,7 @@ export class SendNotificationCommandHandler implements IRequestHandler<
   constructor(
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository,
-    @inject("SendNotificationCommandValidator")
+    @inject(SendNotificationCommandValidator)
     private readonly _validator: SendNotificationCommandValidator,
     @inject("NotificationPublisher")
     private readonly _notificationPublisher: IPublisher<Notification>
@@ -27,7 +27,7 @@ export class SendNotificationCommandHandler implements IRequestHandler<
 
     const notification = new Notification(value.channel, JSON.stringify(value.data));
     await this._notificationRepository.save(notification);
-    // await this._notificationPublisher.publish(notification);
+    await this._notificationPublisher.publish(notification);
 
     return Result.success("Notification sent successfully", notification.id);
   }

@@ -11,9 +11,10 @@ export class NotificationRepository implements INotificationRepository {
   }
 
   public async find(query: object = {}): Promise<Array<Notification>> {
+    console.log(query);
     return this._dbContext.notifications
       .createQueryBuilder("notification")
-      .where(query)
+      .where({})
       .orderBy({ created_at: "DESC" })
       .getMany();
   }
