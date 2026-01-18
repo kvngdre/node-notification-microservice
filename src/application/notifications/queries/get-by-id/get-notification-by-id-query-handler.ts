@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { GetNotificationByIdQuery } from "./get-notification-by-id-query";
 import { NotificationResponseDTO } from "@application/notifications/shared/notification-response-dto";
 import { Result, ResultType } from "@shared-kernel/result";
-import { INotificationRepository, NotificationExceptions } from "@domain/notifications";
+import { INotificationRepository, NotificationExceptions } from "@domain/notification";
 import { IRequestHandler } from "@shared-kernel/mediator/request-handler-interface";
 
 @injectable()

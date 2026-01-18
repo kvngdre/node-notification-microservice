@@ -1,4 +1,4 @@
-import { NotificationChannel } from "@domain/notifications";
+import { NotificationChannel } from "@domain/notification";
 import { IRequest } from "@shared-kernel/mediator/request-interface";
 
 export class SendNotificationCommand implements IRequest {

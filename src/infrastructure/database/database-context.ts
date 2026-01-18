@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { DataSource } from "typeorm";
-import { Notification } from "@domain/notifications/notification-entity";
+import { Notification } from "@domain/notification/notification-entity";
 import { Environment, ILogger } from "@shared-kernel/index";
 
 @injectable()

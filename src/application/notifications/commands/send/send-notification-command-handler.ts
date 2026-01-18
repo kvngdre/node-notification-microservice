@@ -1,9 +1,9 @@
 import { inject, injectable } from "inversify";
 import { SendNotificationCommand } from "./send-notification-command";
 import { Result, ResultType } from "@shared-kernel/result";
-import { INotificationRepository } from "@domain/notifications/notification-repository-interface";
+import { INotificationRepository } from "@domain/notification/notification-repository-interface";
 import { AbstractValidator } from "@shared-kernel/abstract-validator";
-import { Notification } from "@domain/notifications";
+import { Notification } from "@domain/notification";
 import { IPublisher } from "@application/abstractions/publisher";
 import { IRequestHandler } from "@shared-kernel/mediator/request-handler-interface";
 

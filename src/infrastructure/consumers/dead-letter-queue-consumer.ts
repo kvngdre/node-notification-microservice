@@ -1,9 +1,9 @@
 import { inject, injectable } from "inversify";
 import { Channel, connect, Connection, ConsumeMessage } from "amqplib";
 import { IConsumer } from "@application/abstractions/consumer/consumer-interface";
-import { INotificationRepository } from "@domain/notifications/notification-repository-interface";
+import { INotificationRepository } from "@domain/notification/notification-repository-interface";
 import { ILogger } from "@shared-kernel/logger-interface";
-import { Notification, NotificationStatus } from "@domain/notifications";
+import { Notification, NotificationStatus } from "@domain/notification";
 import { Environment } from "@shared-kernel/environment";
 
 @injectable()

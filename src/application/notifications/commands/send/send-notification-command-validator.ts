@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { z } from "zod";
 import { SendNotificationCommand } from "./send-notification-command";
-import { NotificationChannel } from "@domain/notifications";
+import { NotificationChannel } from "@domain/notification";
 import { AbstractValidator, ValidationResultType } from "@shared-kernel/abstract-validator";
 
 @injectable()

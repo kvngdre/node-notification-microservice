@@ -1,6 +1,6 @@
 import { DeleteNotificationByIdCommand } from "./delete-notification-by-id-command";
 import { Result, ResultType } from "@shared-kernel/result";
-import { INotificationRepository, NotificationExceptions } from "@domain/notifications";
+import { INotificationRepository, NotificationExceptions } from "@domain/notification";
 import { IRequestHandler } from "@shared-kernel/mediator/request-handler-interface";
 import { inject, injectable } from "inversify";
 

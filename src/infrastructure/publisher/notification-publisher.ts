@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { Channel, connect, Connection } from "amqplib";
 import { IPublisher } from "@application/abstractions/publisher";
-import { Notification } from "@domain/notifications";
+import { Notification } from "@domain/notification";
 import { Environment, ILogger } from "@shared-kernel/index";
 
 @injectable()

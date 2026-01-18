@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { INotificationRepository, Notification } from "@domain/notifications";
+import { INotificationRepository, Notification } from "@domain/notification";
 import { DatabaseContext } from "@infrastructure/database/database-context";
 
 @injectable()

@@ -8,7 +8,7 @@ import {
   NotificationChannel,
   // NotificationExceptions,
   NotificationStatus
-} from "@domain/notifications";
+} from "@domain/notification";
 import { IRequestHandler } from "@shared-kernel/mediator";
 
 @injectable()
