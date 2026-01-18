@@ -91,7 +91,7 @@ export default class WebApp {
       // Start HTTP server
       this._server = this._app.listen(this._options.port, () => {
         if (Environment.isDevelopment) {
-          this._logger.logDebug(`Server running on port: ${this._options.port}`);
+          this._logger.logInfo(`Server running on port: ${this._options.port}`);
           this._logger.logInfo(`API docs: http://localhost:${this._options.port}/api/v1`);
         } else {
           console.log(`Server running on port: [${this._options.port}]`);

@@ -1,26 +1,35 @@
 import { injectable } from "inversify";
 import { z } from "zod";
 import { SendNotificationCommand } from "./send-notification-command";
-import { NotificationChannel } from "@domain/notification";
-import { AbstractValidator, ValidationResultType } from "@shared-kernel/abstract-validator";
+import { NotificationChannel } from "@domain/notification/types/index";
+import { AbstractValidator } from "@shared-kernel/abstract-validator";
 
 @injectable()
 export class SendNotificationCommandValidator extends AbstractValidator<SendNotificationCommand> {
-  public validate(command: SendNotificationCommand): ValidationResultType<SendNotificationCommand> {
-    const isBuffer = (value: unknown): value is Buffer => Buffer.isBuffer(value);
+  private readonly isBuffer = (value: unknown): value is Buffer => Buffer.isBuffer(value);
 
-    const emailDataSchema = z.object({
+  private readonly emailCommandSchema = z.object({
+    channel: z.literal(NotificationChannel.EMAIL),
+    data: z.object({
       alias: z.string().trim().min(3).max(30),
       from: z.string().trim().min(1).email(),
       to: z.string().trim().min(1).email(),
       subject: z.string().trim().min(3).max(100),
       body: z.string().trim().min(1).max(2_000),
       attachments: z
-        .array(z.object({ filename: z.string(), content: z.custom<Buffer>(isBuffer) }))
+        .array(
+          z.object({
+            filename: z.string(),
+            content: z.custom<Buffer>(this.isBuffer)
+          })
+        )
         .optional()
-    });
+    })
+  });
 
-    const smsDataSchema = z.object({
+  private readonly smsCommandSchema = z.object({
+    channel: z.literal(NotificationChannel.SMS),
+    data: z.object({
       to: z
         .string()
         .trim()
@@ -29,24 +38,27 @@ export class SendNotificationCommandValidator extends AbstractValidator<SendNoti
             "Invalid recipient phone number. Phone number is expected in international format."
         }),
       body: z.string().trim().min(1)
-    });
+    })
+  });
 
-    const pushDataSchema = z.object({
+  private readonly pushCommandSchema = z.object({
+    channel: z.literal(NotificationChannel.PUSH),
+    data: z.object({
       deviceToken: z.string().trim().min(1),
       title: z.string().trim().min(1).max(100),
       body: z.string().trim().min(1),
       imageUrl: z.string().url({ message: "Invalid url" }).optional()
-    });
+    })
+  });
 
-    const dataSchema = z.union([emailDataSchema, smsDataSchema, pushDataSchema]);
+  private readonly schema = z.discriminatedUnion("channel", [
+    this.emailCommandSchema,
+    this.smsCommandSchema,
+    this.pushCommandSchema
+  ]);
 
-    const schema = z.object({
-      channel: z.nativeEnum(NotificationChannel),
-      data: dataSchema
-    });
-
-    const result = schema.safeParse(command);
-
+  public validate(command: SendNotificationCommand) {
+    const result = this.schema.safeParse(command);
     return this.mapToValidationResult(result);
   }
 }

@@ -1,13 +1,13 @@
 import { inject, injectable } from "inversify";
-import { GetNotificationByIdQuery } from "./get-notification-by-id-query";
+import { GetNotificationQuery } from "./get-notification-query";
 import { NotificationResponseDTO } from "@application/notifications/shared/notification-response-dto";
 import { Result, ResultType } from "@shared-kernel/result";
 import { INotificationRepository, NotificationExceptions } from "@domain/notification";
-import { IRequestHandler } from "@shared-kernel/mediator/request-handler-interface";
+import { IRequestHandler } from "@application/abstractions/messaging/request-handler-interface";
 
 @injectable()
-export class GetNotificationByIdQueryHandler implements IRequestHandler<
-  GetNotificationByIdQuery,
+export class GetNotificationQueryHandler implements IRequestHandler<
+  GetNotificationQuery,
   NotificationResponseDTO
 > {
   constructor(
@@ -15,14 +15,10 @@ export class GetNotificationByIdQueryHandler implements IRequestHandler<
     private readonly _notificationRepository: INotificationRepository
   ) {}
 
-  public async handle(
-    query: GetNotificationByIdQuery
-  ): Promise<ResultType<NotificationResponseDTO>> {
+  public async handle(query: GetNotificationQuery): Promise<ResultType<NotificationResponseDTO>> {
     const notification = await this._notificationRepository.findById(query.notificationId);
 
-    if (notification === null) {
-      return Result.failure(NotificationExceptions.NotFound(query.notificationId));
-    }
+    if (!notification) return Result.failure(NotificationExceptions.NotFound);
 
     return Result.success("Notification retrieved", NotificationResponseDTO.from(notification));
   }

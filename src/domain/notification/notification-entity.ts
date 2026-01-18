@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 import { ulid } from "ulid";
-import { NotificationChannel } from "./notification-channel";
-import { NotificationStatus } from "./notification-status";
-
+import { NotificationChannel } from "./types/notification-channel-type";
+import { NotificationStatus, NotificationStatusType } from "./types/notification-status-type";
+import { NotificationChannelType } from "./types/notification-channel-type";
 @Entity("notifications")
 export class Notification {
   @PrimaryColumn({
@@ -15,13 +15,13 @@ export class Notification {
     enum: NotificationStatus,
     default: NotificationStatus.PENDING
   })
-  public status: NotificationStatus;
+  public status: NotificationStatusType;
 
   @Column({
     type: "enum",
     enum: NotificationChannel
   })
-  public channel: NotificationChannel;
+  public channel: NotificationChannelType;
 
   @Column("text")
   public data: string;
@@ -46,9 +46,9 @@ export class Notification {
   public updatedAt: Date;
 
   constructor(
-    channel: NotificationChannel,
+    channel: NotificationChannelType,
     data: string,
-    status: NotificationStatus = NotificationStatus.PENDING,
+    status: NotificationStatusType = NotificationStatus.PENDING,
     retryCount: number = 0
   ) {
     this.channel = channel;

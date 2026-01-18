@@ -1,15 +1,10 @@
 import { inject, injectable } from "inversify";
 import { CreateNotificationCommand } from "./create-notification-command";
 import { NotificationResponseDTO } from "@application/notifications/shared/notification-response-dto";
-import { Result, ResultType, AbstractValidator } from "@shared-kernel/index";
-import {
-  INotificationRepository,
-  Notification,
-  NotificationChannel,
-  // NotificationExceptions,
-  NotificationStatus
-} from "@domain/notification";
-import { IRequestHandler } from "@shared-kernel/mediator";
+import { Result, ResultType } from "@shared-kernel/index";
+import { INotificationRepository, Notification } from "@domain/notification";
+import { IRequestHandler } from "@application/abstractions/messaging/request-handler-interface";
+import { CreateNotificationCommandValidator } from "./create-notification-command-validator";
 
 @injectable()
 export class CreateNotificationCommandHandler implements IRequestHandler<
@@ -20,23 +15,20 @@ export class CreateNotificationCommandHandler implements IRequestHandler<
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository,
     @inject("CreateNotificationCommandValidator")
-    private readonly _createNotificationCommandValidator: AbstractValidator<CreateNotificationCommand>
+    private readonly _validator: CreateNotificationCommandValidator
   ) {}
 
   public async handle(
     command: CreateNotificationCommand
   ): Promise<ResultType<NotificationResponseDTO>> {
-    const { isFailure, exception, value } =
-      this._createNotificationCommandValidator.validate(command);
+    const { isFailure, exception, value } = this._validator.validate(command);
 
-    if (isFailure) {
-      return Result.failure(exception);
-    }
+    if (isFailure) return Result.failure(exception);
 
     const notification = new Notification(
-      value.channel as NotificationChannel,
+      value.channel,
       value.data,
-      value.status as NotificationStatus,
+      value.status,
       value.retryCount
     );
 

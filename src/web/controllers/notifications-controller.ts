@@ -12,12 +12,12 @@ import {
   SendNotificationCommandHandler
 } from "@application/notifications/commands/send";
 import {
-  GetNotificationByIdQuery,
-  GetNotificationByIdQueryHandler
-} from "@application/notifications/queries/get-by-id";
+  GetNotificationQuery,
+  GetNotificationQueryHandler
+} from "@application/notifications/queries/get-one";
 import {
-  DeleteNotificationByIdCommand,
-  DeleteNotificationByIdCommandHandler
+  DeleteNotificationCommand,
+  DeleteNotificationCommandHandler
 } from "@application/notifications/commands/delete";
 import {
   GetNotificationsQuery,
@@ -27,20 +27,20 @@ import {
 @injectable()
 export default class NotificationsController extends BaseController {
   constructor(
-    @inject("CreateNotificationCommandHandler")
+    @inject(CreateNotificationCommandHandler)
     private readonly createHandler: CreateNotificationCommandHandler,
 
-    @inject("SendNotificationCommandHandler")
+    @inject(SendNotificationCommandHandler)
     private readonly sendHandler: SendNotificationCommandHandler,
 
-    @inject("GetNotificationByIdQueryHandler")
-    private readonly getByIdHandler: GetNotificationByIdQueryHandler,
+    @inject(GetNotificationQueryHandler)
+    private readonly getOneHandler: GetNotificationQueryHandler,
 
-    @inject("GetNotificationsQueryHandler")
-    private readonly getHandler: GetNotificationsQueryHandler,
+    @inject(GetNotificationsQueryHandler)
+    private readonly getManyHandler: GetNotificationsQueryHandler,
 
-    @inject("DeleteNotificationByIdCommandHandler")
-    private readonly deleteHandler: DeleteNotificationByIdCommandHandler
+    @inject(DeleteNotificationCommandHandler)
+    private readonly deleteHandler: DeleteNotificationCommandHandler
   ) {
     super();
   }
@@ -78,9 +78,9 @@ export default class NotificationsController extends BaseController {
 
   /** Handles retrieving a notification by its ID. */
   public getNotificationById = async (req: Request<{ notificationId: string }>, res: Response) => {
-    const query = new GetNotificationByIdQuery(req.params.notificationId);
+    const query = new GetNotificationQuery(req.params.notificationId);
 
-    const result = await this.getByIdHandler.handle(query);
+    const result = await this.getOneHandler.handle(query);
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
@@ -103,7 +103,7 @@ export default class NotificationsController extends BaseController {
       req.query.status
     );
 
-    const result = await this.getHandler.handle(query);
+    const result = await this.getManyHandler.handle(query);
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
@@ -114,7 +114,7 @@ export default class NotificationsController extends BaseController {
     req: Request<{ notificationId: string }>,
     res: Response
   ) => {
-    const command = new DeleteNotificationByIdCommand(req.params.notificationId);
+    const command = new DeleteNotificationCommand(req.params.notificationId);
 
     const result = await this.deleteHandler.handle(command);
     const { code, payload } = this.buildHttpResponse(result, res);

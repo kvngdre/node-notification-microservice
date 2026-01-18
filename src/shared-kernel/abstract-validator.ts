@@ -2,17 +2,17 @@ import _ from "lodash";
 import { z } from "zod";
 import { ValidationException } from "./validation-exception";
 
-export abstract class AbstractValidator<TRequest extends object> {
-  abstract validate(request: TRequest): ValidationResultType<TRequest>;
+export abstract class AbstractValidator<TRequest extends object, TOutput = TRequest> {
+  abstract validate(request: TRequest): ValidationResultType<TOutput>;
 
-  protected mapToValidationResult(
-    result: z.SafeParseReturnType<TRequest, TRequest>
-  ): ValidationResultType<TRequest> {
+  protected mapToValidationResult<T>(
+    result: z.SafeParseReturnType<TRequest, T>
+  ): ValidationResultType<T> {
     if (result.success) {
       return {
         isSuccess: result.success,
         isFailure: !result.success,
-        value: _.omitBy(result.data, _.isUndefined) as TRequest
+        value: _.omitBy(result.data as any, _.isUndefined) as T
       };
     }
     return {
@@ -43,9 +43,9 @@ interface IValidationFailure {
   exception: ValidationException;
 }
 
-interface IValidationSuccess<TData> {
+interface IValidationSuccess<TValue> {
   isSuccess: true;
   isFailure: false;
-  value: TData;
+  value: TValue;
   exception?: undefined;
 }

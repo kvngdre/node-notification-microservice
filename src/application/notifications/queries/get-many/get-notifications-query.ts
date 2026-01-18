@@ -1,6 +1,4 @@
-import { IRequest } from "@shared-kernel/mediator/request-interface";
-
-export class GetNotificationsQuery implements IRequest {
+export class GetNotificationsQuery {
   constructor(
     public readonly limit?: number,
     public readonly offset?: number,

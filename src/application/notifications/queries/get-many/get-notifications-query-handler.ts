@@ -3,7 +3,7 @@ import { GetNotificationsQuery } from "./get-notifications-query";
 import { NotificationResponseDTO } from "@application/notifications/shared/notification-response-dto";
 import { Result, ResultType } from "@shared-kernel/result";
 import { INotificationRepository, NotificationExceptions } from "@domain/notification";
-import { IRequestHandler } from "@shared-kernel/mediator/request-handler-interface";
+import { IRequestHandler } from "@application/abstractions/messaging/request-handler-interface";
 
 @injectable()
 export class GetNotificationsQueryHandler implements IRequestHandler<
