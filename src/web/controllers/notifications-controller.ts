@@ -1,29 +1,28 @@
 import { type Request, type Response } from "express";
 import { inject, injectable } from "inversify";
-import { BaseController } from "./base-controller";
+import { BaseController } from "./base-controller.js";
 import {
   CreateNotificationCommand,
   CreateNotificationRequest,
   CreateNotificationCommandHandler
-} from "@application/notifications/commands/create";
+} from "@application/notifications/commands/create/index.js";
 import {
   SendNotificationCommand,
   SendNotificationRequest,
   SendNotificationCommandHandler
-} from "@application/notifications/commands/send";
+} from "@application/notifications/commands/send/index.js";
 import {
   GetNotificationQuery,
   GetNotificationQueryHandler
-} from "@application/notifications/queries/get-one";
+} from "@application/notifications/queries/get-one/index.js";
 import {
   DeleteNotificationCommand,
   DeleteNotificationCommandHandler
-} from "@application/notifications/commands/delete";
+} from "@application/notifications/commands/delete/index.js";
 import {
   GetNotificationsQuery,
   GetNotificationsQueryHandler
-} from "@application/notifications/queries/get-many";
-
+} from "@application/notifications/queries/get-many/index.js";
 @injectable()
 export default class NotificationsController extends BaseController {
   constructor(

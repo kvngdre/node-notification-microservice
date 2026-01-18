@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { ILogger } from "@shared-kernel/logger-interface";
+import { ILogger } from "@shared-kernel/logger-interface.js";
 
 export interface IGlobalErrorHandler {
   handle(error: Error): Promise<void>;

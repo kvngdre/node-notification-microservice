@@ -1,4 +1,4 @@
-import { NotificationChannelType } from "./notification-channel-type";
+import { NotificationChannelType } from "./notification-channel-type.js";
 
 interface IEmailNotificationData {
   alias: string;

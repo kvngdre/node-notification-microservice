@@ -1,7 +1,6 @@
 import { type Response } from "express";
-import { Exception } from "@shared-kernel/exception";
-import { ExceptionType } from "@shared-kernel/exception-type";
-import { HttpStatus } from "./http-status";
+import { Exception, ExceptionType } from "@shared-kernel/index.js";
+import { HttpStatus } from "./http-status.js";
 
 type MessageType<T extends boolean> = T extends true ? string : never;
 type DataType<T extends boolean, TData> = T extends true ? TData : never;

@@ -1,18 +1,18 @@
-import container from "../di-container";
+import container from "../di-container.js";
 import {
   CreateNotificationCommandHandler,
   CreateNotificationCommandValidator
-} from "./notifications/commands/create";
-import { GetNotificationQueryHandler } from "./notifications/queries/get-one";
-import { GetNotificationsQueryHandler } from "./notifications/queries/get-many";
+} from "./notifications/commands/create/index.js";
+import { GetNotificationQueryHandler } from "./notifications/queries/get-one/index.js";
+import { GetNotificationsQueryHandler } from "./notifications/queries/get-many/index.js";
 import {
   DeleteNotificationCommandHandler,
   DeleteNotificationCommandValidator
-} from "./notifications/commands/delete";
+} from "./notifications/commands/delete/index.js";
 import {
   SendNotificationCommandHandler,
   SendNotificationCommandValidator
-} from "./notifications/commands/send";
+} from "./notifications/commands/send/index.js";
 
 export function registerApplicationServices() {
   container.bind(CreateNotificationCommandHandler).toSelf().inSingletonScope();

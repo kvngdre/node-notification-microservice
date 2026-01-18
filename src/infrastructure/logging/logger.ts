@@ -1,8 +1,7 @@
 import { injectable } from "inversify";
 import winston, { transports, createLogger, format, addColors } from "winston";
 import "winston-daily-rotate-file";
-import { Environment } from "@shared-kernel/environment";
-import { ILogger } from "@shared-kernel/logger-interface";
+import { Environment, ILogger } from "@shared-kernel/index.js";
 
 @injectable()
 export class Logger implements ILogger {

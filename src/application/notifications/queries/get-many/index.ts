@@ -1,2 +1,2 @@
-export * from "./get-notifications-query";
-export * from "./get-notifications-query-handler";
+export * from "./get-notifications-query.js";
+export * from "./get-notifications-query-handler.js";

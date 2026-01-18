@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
-import { INotificationRepository, Notification } from "@domain/notification";
-import DatabaseContext from "@infrastructure/database/database-context";
+import { INotificationRepository, Notification } from "@domain/notification/index.js";
+import DatabaseContext from "@infrastructure/database/database-context.js";
 
 @injectable()
 export class NotificationRepository implements INotificationRepository {
@@ -10,9 +10,10 @@ export class NotificationRepository implements INotificationRepository {
     return this._dbContext.notifications.save(notification);
   }
 
-  public async find(query: object): Promise<Array<Notification>> {
+  public async find(query: object = {}): Promise<Array<Notification>> {
     return this._dbContext.notifications
       .createQueryBuilder("notification")
+      .where(query)
       .orderBy({ created_at: "DESC" })
       .getMany();
   }

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import container from "../../di-container";
-import NotificationsController from "@web/controllers/notifications-controller";
+import container from "../../di-container.js";
+import NotificationsController from "@web/controllers/notifications-controller.js";
 
 const router = Router();
 

@@ -1,8 +1,8 @@
 import { injectable } from "inversify";
 import { z } from "zod";
-import { AbstractValidator } from "@shared-kernel/abstract-validator";
-import { CreateNotificationCommand } from "./create-notification-command";
-import { NotificationChannel, NotificationStatus } from "@domain/notification/types/index";
+import { AbstractValidator } from "@shared-kernel/abstract-validator.js";
+import { CreateNotificationCommand } from "./create-notification-command.js";
+import { NotificationChannel, NotificationStatus } from "@domain/notification/types/index.js";
 
 @injectable()
 export class CreateNotificationCommandValidator extends AbstractValidator<CreateNotificationCommand> {

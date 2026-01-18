@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import "express-async-errors";
 import "dotenv/config";
-import DatabaseContext from "@infrastructure/database/database-context";
-import container, { registerServices } from "./di-container";
-import WebApp from "./web/web-app";
+import DatabaseContext from "@infrastructure/database/database-context.js";
+import container, { registerServices } from "./di-container.js";
+import WebApp from "./web/web-app.js";
 // import { DeadLetterQueueConsumer } from "@infrastructure/consumer";
 
 export async function startup(): Promise<WebApp> {

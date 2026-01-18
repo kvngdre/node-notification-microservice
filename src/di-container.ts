@@ -1,9 +1,8 @@
-import { registerApplicationServices } from "@application/application-container-registry";
-import { registerInfrastructureServices } from "@infrastructure/infrastructure-container-registry";
-import { Environment } from "@shared-kernel/environment";
-import { ILogger } from "@shared-kernel/logger-interface";
-import { registerWebServices } from "@web/web-container-registry";
 import { Container } from "inversify";
+import { registerApplicationServices } from "@application/application-container-registry.js";
+import { registerInfrastructureServices } from "@infrastructure/infrastructure-container-registry.js";
+import { Environment, ILogger } from "@shared-kernel/index.js";
+import { registerWebServices } from "@web/web-container-registry.js";
 
 const container = new Container();
 
@@ -14,7 +13,9 @@ export function registerServices() {
   registerApplicationServices();
   registerWebServices();
 
-  Environment.isProduction
-    ? console.log("Service registration completed")
-    : container.get<ILogger>("Logger").logInfo("Service registration completed");
+  if (Environment.isProduction) {
+    console.log("Service registration completed");
+  } else {
+    container.get<ILogger>("Logger").logInfo("Service registration completed");
+  }
 }

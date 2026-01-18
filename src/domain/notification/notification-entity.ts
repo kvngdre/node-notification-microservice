@@ -1,8 +1,11 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 import { ulid } from "ulid";
-import { NotificationChannel } from "./types/notification-channel-type";
-import { NotificationStatus, NotificationStatusType } from "./types/notification-status-type";
-import { NotificationChannelType } from "./types/notification-channel-type";
+import {
+  NotificationChannel,
+  NotificationChannelType,
+  NotificationStatus,
+  NotificationStatusType
+} from "./types/index.js";
 @Entity("notifications")
 export class Notification {
   @PrimaryColumn({

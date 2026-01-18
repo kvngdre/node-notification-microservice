@@ -1,14 +1,13 @@
 import { type Server } from "http";
-import { type IWebAppOptions } from "./abstractions/interfaces";
+import { type IWebAppOptions } from "./abstractions/index.js";
 import express, { json, urlencoded, type Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
-import { Environment } from "src/shared-kernel";
-import apiRouter from "./routers/api-router";
-import { AbstractErrorMiddleware, AbstractMiddleware } from "./abstractions/types";
-import { ILogger } from "@shared-kernel/logger-interface";
-import { IGlobalErrorHandler } from "./utils/global-error-handler";
-import container from "../di-container";
+import container from "../di-container.js";
+import { Environment, ILogger } from "../shared-kernel/index.js";
+import { IGlobalErrorHandler } from "./utils/global-error-handler.js";
+import { AbstractErrorMiddleware, AbstractMiddleware } from "./abstractions/index.js";
+import apiRouter from "./routers/api-router.js";
 
 /**
  * WebApp class responsible for configuring and running the Express.js server.

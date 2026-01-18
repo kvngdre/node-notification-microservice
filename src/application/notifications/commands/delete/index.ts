@@ -1,3 +1,3 @@
-export * from "./delete-notification-command";
-export * from "./delete-notification-command-handler";
-export * from "./delete-notification-command-validator";
+export * from "./delete-notification-command.js";
+export * from "./delete-notification-command-handler.js";
+export * from "./delete-notification-command-validator.js";

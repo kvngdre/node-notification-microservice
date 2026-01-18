@@ -1,3 +1,3 @@
-export * from "./notification-entity";
-export * from "./notification-repository-interface";
-export * from "./notification-exceptions";
+export * from "./notification-entity.js";
+export * from "./notification-repository-interface.js";
+export * from "./notification-exceptions.js";

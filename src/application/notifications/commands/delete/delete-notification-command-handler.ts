@@ -1,8 +1,8 @@
-import { DeleteNotificationCommand } from "./delete-notification-command";
-import { Result, ResultType } from "@shared-kernel/result";
-import { INotificationRepository, NotificationExceptions } from "@domain/notification";
 import { inject, injectable } from "inversify";
-import { IRequestHandler } from "@application/abstractions/messaging/request-handler-interface";
+import { DeleteNotificationCommand } from "./delete-notification-command.js";
+import { Result, ResultType } from "@shared-kernel/result.js";
+import { INotificationRepository, NotificationExceptions } from "@domain/notification/index.js";
+import { IRequestHandler } from "@application/abstractions/messaging/request-handler-interface.js";
 
 @injectable()
 export class DeleteNotificationCommandHandler implements IRequestHandler<

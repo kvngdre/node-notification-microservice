@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { AbstractValidator, ValidationResultType } from "@shared-kernel/abstract-validator";
-import { GetNotificationQuery } from "./get-notification-query";
+import { AbstractValidator, ValidationResultType } from "@shared-kernel/abstract-validator.js";
+import { GetNotificationQuery } from "./get-notification-query.js";
 
 export class GetNotificationQueryValidator extends AbstractValidator<GetNotificationQuery> {
   private readonly schema = z.object({

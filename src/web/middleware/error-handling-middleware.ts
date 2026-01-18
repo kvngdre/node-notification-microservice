@@ -1,9 +1,9 @@
 import { type Request, type Response, type NextFunction } from "express";
 import { inject, injectable } from "inversify";
-import { AbstractErrorMiddleware } from "@web/abstractions/types/abstract-error-middleware";
-import { ApiResponse } from "@web/utils/api-response";
-import GlobalErrorHandler from "@web/utils/global-error-handler";
-import { Exception, ValidationException } from "@shared-kernel/index";
+import { AbstractErrorMiddleware } from "@web/abstractions/abstract-error-middleware.js";
+import { ApiResponse } from "@web/utils/api-response.js";
+import GlobalErrorHandler from "@web/utils/global-error-handler.js";
+import { Exception, ValidationException } from "@shared-kernel/index.js";
 
 @injectable()
 export class ErrorHandlingMiddleware extends AbstractErrorMiddleware {

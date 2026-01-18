@@ -1,10 +1,10 @@
 import { inject, injectable } from "inversify";
 import { Channel, connect, Connection, ConsumeMessage } from "amqplib";
-import { IConsumer } from "@application/abstractions/consumer/consumer-interface";
-import { INotificationRepository } from "@domain/notification/notification-repository-interface";
-import { ILogger } from "@shared-kernel/logger-interface";
-import { Notification, NotificationStatus } from "@domain/notification";
-import { Environment } from "@shared-kernel/environment";
+import { IConsumer } from "@application/abstractions/consumer/consumer-interface.js";
+import { INotificationRepository } from "@domain/notification/notification-repository-interface.js";
+import { Environment, ILogger } from "@shared-kernel/index.js";
+import { Notification } from "@domain/notification/index.js";
+import { NotificationStatus } from "@domain/notification/types/notification-status-type.js";
 
 @injectable()
 export class DeadLetterQueueConsumer implements IConsumer {
@@ -15,7 +15,7 @@ export class DeadLetterQueueConsumer implements IConsumer {
   private readonly _mainQueue = process.env.RMQ_MAIN_QUEUE || "send_notification_queue";
   private readonly _retryLimit = Number(process.env.RETRY_LIMIT) || 3;
   private readonly _rmqHostname = process.env.RMQ_HOST || "localhost";
-  private readonly _rmqPort = process.env.RMQ_PORT || 5672;
+  private readonly _rmqPort = Number(process.env.RMQ_PORT) || 5672;
   private _connection: Connection | null = null;
 
   constructor(
@@ -99,7 +99,7 @@ export class DeadLetterQueueConsumer implements IConsumer {
       if (this._connection === null) {
         this._connection = await connect({
           hostname: this._rmqHostname,
-          port: Number(this._rmqPort) ?? 5672,
+          port: this._rmqPort,
           username: "guest",
           password: "guest"
         });

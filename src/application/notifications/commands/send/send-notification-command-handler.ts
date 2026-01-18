@@ -1,11 +1,10 @@
 import { inject, injectable } from "inversify";
-import { SendNotificationCommand } from "./send-notification-command";
-import { Result, ResultType } from "@shared-kernel/result";
-import { INotificationRepository } from "@domain/notification/notification-repository-interface";
-import { Notification } from "@domain/notification";
-import { IPublisher } from "@application/abstractions/publisher";
-import { IRequestHandler } from "@application/abstractions/messaging/request-handler-interface";
-import { SendNotificationCommandValidator } from "./send-notification-command-validator";
+import { SendNotificationCommand } from "./send-notification-command.js";
+import { Result, ResultType } from "@shared-kernel/result.js";
+import { Notification, INotificationRepository } from "@domain/notification/index.js";
+import { IPublisher } from "@application/abstractions/publisher/publisher-interface.js";
+import { IRequestHandler } from "@application/abstractions/messaging/request-handler-interface.js";
+import { SendNotificationCommandValidator } from "./send-notification-command-validator.js";
 
 @injectable()
 export class SendNotificationCommandHandler implements IRequestHandler<

@@ -1,5 +1,5 @@
-import { Exception } from "./exception";
-import { ExceptionType } from "./exception-type";
+import { Exception } from "./exception.js";
+import { ExceptionType } from "./exception-type.js";
 
 export class ValidationException extends Exception {
   constructor(

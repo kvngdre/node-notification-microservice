@@ -1,4 +1,4 @@
-import { Exception } from "@shared-kernel/exception";
+import { Exception } from "@shared-kernel/exception.js";
 
 export class NotificationExceptions {
   public static readonly NotFound = Exception.NotFound(

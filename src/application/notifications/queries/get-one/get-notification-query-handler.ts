@@ -1,9 +1,9 @@
 import { inject, injectable } from "inversify";
-import { GetNotificationQuery } from "./get-notification-query";
-import { NotificationResponseDTO } from "@application/notifications/shared/notification-response-dto";
-import { Result, ResultType } from "@shared-kernel/result";
-import { INotificationRepository, NotificationExceptions } from "@domain/notification";
-import { IRequestHandler } from "@application/abstractions/messaging/request-handler-interface";
+import { GetNotificationQuery } from "./get-notification-query.js";
+import { NotificationResponseDTO } from "@application/notifications/shared/notification-response-dto.js";
+import { Result, ResultType } from "@shared-kernel/result.js";
+import { INotificationRepository, NotificationExceptions } from "@domain/notification/index.js";
+import { IRequestHandler } from "@application/abstractions/messaging/request-handler-interface.js";
 
 @injectable()
 export class GetNotificationQueryHandler implements IRequestHandler<

@@ -1,4 +1,4 @@
-import { Exception, ExceptionType } from "@shared-kernel/index";
+import { Exception, ExceptionType } from "@shared-kernel/index.js";
 
 export class HttpStatus {
   public static readonly OK = 200;

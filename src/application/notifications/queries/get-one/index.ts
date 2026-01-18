@@ -1,3 +1,3 @@
-export * from "./get-notification-query";
-export * from "./get-notification-query-handler";
-export * from "./get-notification-query-validator";
+export * from "./get-notification-query.js";
+export * from "./get-notification-query-handler.js";
+export * from "./get-notification-query-validator.js";

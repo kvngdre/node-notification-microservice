@@ -1,3 +1,3 @@
-export * from "./notification-channel-type";
-export * from "./notification-data-type";
-export * from "./notification-status-type";
+export * from "./notification-channel-type.js";
+export * from "./notification-data-type.js";
+export * from "./notification-status-type.js";

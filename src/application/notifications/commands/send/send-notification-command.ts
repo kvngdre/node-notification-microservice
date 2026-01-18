@@ -1,4 +1,4 @@
-import { NotificationChannelType, NotificationData } from "@domain/notification/types/index";
+import { NotificationChannelType, NotificationData } from "@domain/notification/types/index.js";
 
 export class SendNotificationCommand {
   constructor(

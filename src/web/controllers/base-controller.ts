@@ -1,7 +1,7 @@
 import { type Response } from "express";
-import { type ResultType } from "@shared-kernel/result";
-import { ApiResponse } from "@web/utils/api-response";
-import { HttpStatus } from "@web/utils/http-status";
+import { type ResultType } from "@shared-kernel/result.js";
+import { ApiResponse } from "@web/utils/api-response.js";
+import { HttpStatus } from "@web/utils/http-status.js";
 
 export abstract class BaseController {
   protected buildHttpResponse<TValue>(result: ResultType<TValue>, res: Response) {

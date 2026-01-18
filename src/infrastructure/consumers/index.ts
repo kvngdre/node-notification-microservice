@@ -1,1 +1,1 @@
-export * from "./dead-letter-queue-consumer";
+export * from "./dead-letter-queue-consumer.js";

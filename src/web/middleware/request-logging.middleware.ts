@@ -1,8 +1,8 @@
 import { type NextFunction, type Request, type Response } from "express";
 import { inject, injectable } from "inversify";
 import morgan, { token } from "morgan";
-import { AbstractMiddleware } from "@web/abstractions/types/abstract-middleware";
-import { Environment, ILogger } from "@shared-kernel/index";
+import { AbstractMiddleware } from "@web/abstractions/abstract-middleware.js";
+import { Environment, ILogger } from "@shared-kernel/index.js";
 
 @injectable()
 export class RequestLoggingMiddleware extends AbstractMiddleware {
@@ -37,7 +37,7 @@ export class RequestLoggingMiddleware extends AbstractMiddleware {
    * @param req Request object
    * @param res Response object
    */
-  private _createCustomTokens(req: Request, res: Response) {
+  private _createCustomTokens(_: Request, __: Response) {
     token("reqContext", function getRequestBody(req: Request) {
       if (["GET", "DELETE"].includes(req.method)) {
         return JSON.stringify(

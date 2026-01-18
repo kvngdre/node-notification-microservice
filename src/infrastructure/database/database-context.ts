@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { DataSource } from "typeorm";
-import { Notification } from "@domain/notification/notification-entity";
-import { Environment, ILogger } from "@shared-kernel/index";
+import { Notification } from "@domain/notification/notification-entity.js";
+import { Environment, ILogger } from "@shared-kernel/index.js";
 
 @injectable()
 export default class DatabaseContext {
@@ -29,9 +29,11 @@ export default class DatabaseContext {
       this._connection = await this._dataSource.initialize();
 
       if (this._connection.isInitialized) {
-        Environment.isProduction
-          ? console.log("Connected to database")
-          : this._logger.logInfo("Connected to database");
+        if (Environment.isProduction) {
+          console.log("Connected to database");
+        } else {
+          this._logger.logInfo("Connected to database");
+        }
       }
     } catch (error: unknown) {
       if (error instanceof Error) {

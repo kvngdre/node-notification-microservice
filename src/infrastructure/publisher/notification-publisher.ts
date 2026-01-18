@@ -1,8 +1,8 @@
 import { inject, injectable } from "inversify";
 import { Channel, connect, Connection } from "amqplib";
-import { IPublisher } from "@application/abstractions/publisher";
-import { Notification } from "@domain/notification";
-import { Environment, ILogger } from "@shared-kernel/index";
+import { IPublisher } from "@application/abstractions/publisher/publisher-interface.js";
+import { Notification } from "@domain/notification/notification-entity.js";
+import { Environment, ILogger } from "@shared-kernel/index.js";
 
 @injectable()
 export class NotificationPublisher implements IPublisher<Notification> {
@@ -44,7 +44,7 @@ export class NotificationPublisher implements IPublisher<Notification> {
     if (this._connection === null) {
       this._connection = await connect({
         hostname: this._rmqHostname,
-        port: Number(this._rmqPort) ?? 5672,
+        port: this._rmqPort,
         username: "guest",
         password: "guest"
       });

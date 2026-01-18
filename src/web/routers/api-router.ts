@@ -1,5 +1,5 @@
 import { type Request, type Response, Router } from "express";
-import notificationsRouter from "./notifications-router";
+import notificationsRouter from "./notifications-router.js";
 
 export const router = Router();
 
