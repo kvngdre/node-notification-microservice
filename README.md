@@ -21,7 +21,6 @@ This microservice is crafted with a focus on scalable and efficient architecture
 - **Daily Log Rotation**: Automatically rotates logs daily to manage log file size and maintain performance.
 - **Dependency Injection**: Utilizes dependency injection to manage service dependencies and improve testability.
 - **CQRS Pattern (Command Query Responsibility Segregation)**: Separates command (write) and query (read) responsibilities for optimized performance and scalability.
-- **Mediator Pattern**: Facilitates communication between components and handles requests and responses in a decoupled manner.
 - **Request Handler Self Discovery and Registration**: Automatically discovers and registers request handlers to streamline the addition of new handlers.
 - **Asynchronous Communication**: Interfaces with notification worker(s) to handle background processing and ensure efficient notification delivery.
 - **Message Broker Integration with RabbitMQ**: Utilizes RabbitMQ for reliable and scalable message queuing, ensuring robust message handling and delivery.
@@ -132,7 +131,6 @@ I welcome and encourage feature requests to help improve the Notification Micros
 2. **Check Existing Issues**: Before submitting a new feature request, please check if your idea has already been proposed or discussed. You can use the search bar to find related issues.
 3. Submit a New Issue: If your feature request is not already listed, click on the "New issue" button to create a new issue.
 4. Provide Details:
-
    - Title: Write a clear and concise title for your feature request.
    - Description: Describe the feature you are requesting in detail. Include information such as:
      - Use Case: Why do you think this feature is necessary? What problem does it solve?
