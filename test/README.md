@@ -4,7 +4,7 @@ This document outlines the comprehensive testing strategy implemented for the No
 
 ## Test Structure
 
-```
+```sh
 test/
 ├── setup.ts                    # Global test configuration
 ├── helpers/                    # Shared test utilities

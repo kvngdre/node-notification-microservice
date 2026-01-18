@@ -107,6 +107,45 @@ export class TestDataBuilder {
   }
 
   /**
+   * Create a SendNotificationCommand for SMS testing
+   */
+  static createSendSmsCommand(): SendNotificationCommand {
+    return new SendNotificationCommand(NotificationChannel.SMS, {
+      to: "+2347012345678",
+      message: "Test SMS message"
+    } as any);
+  }
+
+  /**
+   * Create a SendNotificationCommand for Push testing
+   */
+  static createSendPushCommand(): SendNotificationCommand {
+    return new SendNotificationCommand(NotificationChannel.PUSH, {
+      userId: "user123",
+      title: "Test Push",
+      body: "This is a test push notification"
+    } as any);
+  }
+
+  /**
+   * Create SMS notification for testing
+   */
+  static createSmsNotification(overrides: Partial<Notification> = {}): Notification {
+    const notification = new Notification(
+      NotificationChannel.SMS,
+      JSON.stringify({
+        to: "+2347012345678",
+        message: "Test SMS message"
+      }),
+      NotificationStatus.PENDING,
+      0
+    );
+
+    Object.assign(notification, overrides);
+    return notification;
+  }
+
+  /**
    * Create invalid notification data for error testing
    */
   static createInvalidEmailData() {
