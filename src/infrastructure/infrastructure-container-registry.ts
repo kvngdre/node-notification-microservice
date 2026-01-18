@@ -1,17 +1,15 @@
 import container from "../di-container";
 import { Logger } from "./logging/logger";
 import { ILogger } from "@shared-kernel/logger-interface";
-import { DatabaseContext } from "./database/database-context";
+import DatabaseContext from "./database/database-context";
 import { NotificationRepository } from "./repositories";
 import { INotificationRepository } from "@domain/notification";
 import { NotificationPublisher } from "./publisher/notification-publisher";
 import { DeadLetterQueueConsumer } from "./consumers/dead-letter-queue-consumer";
-import Mediator, { IMediator } from "@shared-kernel/mediator";
 
 export function registerInfrastructureServices() {
-  container.bind<IMediator>("Mediator").to(Mediator).inSingletonScope();
   container.bind<ILogger>("Logger").to(Logger).inSingletonScope();
-  container.bind<DatabaseContext>("DatabaseContext").to(DatabaseContext).inSingletonScope();
+  container.bind(DatabaseContext).toSelf().inSingletonScope();
   container
     .bind<INotificationRepository>("NotificationRepository")
     .to(NotificationRepository)

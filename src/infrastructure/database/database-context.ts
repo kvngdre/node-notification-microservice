@@ -4,7 +4,7 @@ import { Notification } from "@domain/notification/notification-entity";
 import { Environment, ILogger } from "@shared-kernel/index";
 
 @injectable()
-export class DatabaseContext {
+export default class DatabaseContext {
   private readonly _dataSource: DataSource;
   private _connection: DataSource;
 

@@ -1,19 +1,50 @@
 import { type Request, type Response } from "express";
+import { inject, injectable } from "inversify";
+import { BaseController } from "./base-controller";
 import {
   CreateNotificationCommand,
-  CreateNotificationRequest
+  CreateNotificationRequest,
+  CreateNotificationCommandHandler
 } from "@application/notifications/commands/create";
-import { BaseController } from "./base-controller";
-import { NotificationResponseDTO } from "@application/notifications/shared/notification-response-dto";
-import { GetNotificationByIdQuery } from "@application/notifications/queries/get-by-id";
-import { GetNotificationsQuery } from "@application/notifications/queries/get-many";
-import { DeleteNotificationByIdCommand } from "@application/notifications/commands/delete";
 import {
   SendNotificationCommand,
-  SendNotificationRequest
+  SendNotificationRequest,
+  SendNotificationCommandHandler
 } from "@application/notifications/commands/send";
+import {
+  GetNotificationByIdQuery,
+  GetNotificationByIdQueryHandler
+} from "@application/notifications/queries/get-by-id";
+import {
+  DeleteNotificationByIdCommand,
+  DeleteNotificationByIdCommandHandler
+} from "@application/notifications/commands/delete";
+import {
+  GetNotificationsQuery,
+  GetNotificationsQueryHandler
+} from "@application/notifications/queries/get-many";
 
-class NotificationsController extends BaseController {
+@injectable()
+export default class NotificationsController extends BaseController {
+  constructor(
+    @inject("CreateNotificationCommandHandler")
+    private readonly createHandler: CreateNotificationCommandHandler,
+
+    @inject("SendNotificationCommandHandler")
+    private readonly sendHandler: SendNotificationCommandHandler,
+
+    @inject("GetNotificationByIdQueryHandler")
+    private readonly getByIdHandler: GetNotificationByIdQueryHandler,
+
+    @inject("GetNotificationsQueryHandler")
+    private readonly getHandler: GetNotificationsQueryHandler,
+
+    @inject("DeleteNotificationByIdCommandHandler")
+    private readonly deleteHandler: DeleteNotificationByIdCommandHandler
+  ) {
+    super();
+  }
+
   /** Handles the creation of a new notification. */
   public createNotification = async (
     req: Request<object, object, CreateNotificationRequest>,
@@ -26,7 +57,20 @@ class NotificationsController extends BaseController {
       req.body.status
     );
 
-    const result = await this.mediator.send<NotificationResponseDTO>(command);
+    const result = await this.createHandler.handle(command);
+    const { code, payload } = this.buildHttpResponse(result, res);
+
+    return res.status(code).json(payload);
+  };
+
+  /** Handles sending a notification through the specified channel. */
+  public sendNotification = async (
+    req: Request<object, object, SendNotificationRequest>,
+    res: Response
+  ) => {
+    const command = new SendNotificationCommand(req.body.channel, req.body.data);
+
+    const result = await this.sendHandler.handle(command);
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
@@ -36,7 +80,7 @@ class NotificationsController extends BaseController {
   public getNotificationById = async (req: Request<{ notificationId: string }>, res: Response) => {
     const query = new GetNotificationByIdQuery(req.params.notificationId);
 
-    const result = await this.mediator.send<NotificationResponseDTO>(query);
+    const result = await this.getByIdHandler.handle(query);
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
@@ -59,7 +103,7 @@ class NotificationsController extends BaseController {
       req.query.status
     );
 
-    const result = await this.mediator.send<NotificationResponseDTO>(query);
+    const result = await this.getHandler.handle(query);
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
@@ -72,24 +116,9 @@ class NotificationsController extends BaseController {
   ) => {
     const command = new DeleteNotificationByIdCommand(req.params.notificationId);
 
-    const result = await this.mediator.send(command);
-    const { code, payload } = this.buildHttpResponse(result, res);
-
-    return res.status(code).json(payload);
-  };
-
-  /** Handles sending a notification through the specified channel. */
-  public sendNotification = async (
-    req: Request<object, object, SendNotificationRequest>,
-    res: Response
-  ) => {
-    const command = new SendNotificationCommand(req.body.channel, req.body.data);
-
-    const result = await this.mediator.send(command);
+    const result = await this.deleteHandler.handle(command);
     const { code, payload } = this.buildHttpResponse(result, res);
 
     return res.status(code).json(payload);
   };
 }
-
-export default new NotificationsController();

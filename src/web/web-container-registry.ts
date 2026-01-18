@@ -4,6 +4,7 @@ import { RequestLoggingMiddleware } from "./middleware/request-logging.middlewar
 import { ResourceNotFoundMiddleware } from "./middleware/resource-not-found-middleware";
 import container from "src/di-container";
 import GlobalErrorHandler, { IGlobalErrorHandler } from "./utils/global-error-handler";
+import NotificationsController from "./controllers/notifications-controller";
 
 export function registerWebServices() {
   container
@@ -18,9 +19,10 @@ export function registerWebServices() {
     .bind<AbstractErrorMiddleware>("ErrorHandlingMiddleware")
     .to(ErrorHandlingMiddleware)
     .inSingletonScope();
-
   container
     .bind<IGlobalErrorHandler>("GlobalErrorHandler")
     .to(GlobalErrorHandler)
     .inSingletonScope();
+
+  container.bind(NotificationsController).toSelf().inSingletonScope();
 }

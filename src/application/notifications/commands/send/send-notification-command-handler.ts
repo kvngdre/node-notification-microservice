@@ -8,7 +8,10 @@ import { IPublisher } from "@application/abstractions/publisher";
 import { IRequestHandler } from "@shared-kernel/mediator/request-handler-interface";
 
 @injectable()
-export class SendNotificationCommandHandler implements IRequestHandler<SendNotificationCommand> {
+export class SendNotificationCommandHandler implements IRequestHandler<
+  SendNotificationCommand,
+  void
+> {
   constructor(
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository,
@@ -18,7 +21,7 @@ export class SendNotificationCommandHandler implements IRequestHandler<SendNotif
     private readonly _notificationPublisher: IPublisher<Notification>
   ) {}
 
-  public async handle(command: SendNotificationCommand): Promise<ResultType> {
+  public async handle(command: SendNotificationCommand): Promise<ResultType<void>> {
     const { isFailure, exception, value } =
       this._sendNotificationCommandValidator.validate(command);
 
@@ -32,6 +35,6 @@ export class SendNotificationCommandHandler implements IRequestHandler<SendNotif
 
     await this._notificationPublisher.publish(notification);
 
-    return Result.success("Notification queued successfully");
+    return Result.success("Notification sent successfully");
   }
 }

@@ -1,10 +1,10 @@
 import { inject, injectable } from "inversify";
 import { INotificationRepository, Notification } from "@domain/notification";
-import { DatabaseContext } from "@infrastructure/database/database-context";
+import DatabaseContext from "@infrastructure/database/database-context";
 
 @injectable()
 export class NotificationRepository implements INotificationRepository {
-  constructor(@inject("DatabaseContext") private readonly _dbContext: DatabaseContext) {}
+  constructor(@inject(DatabaseContext) private readonly _dbContext: DatabaseContext) {}
 
   public async save(notification: Notification): Promise<Notification> {
     return this._dbContext.notifications.save(notification);

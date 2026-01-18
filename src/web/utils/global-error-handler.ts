@@ -9,7 +9,7 @@ export default class GlobalErrorHandler implements IGlobalErrorHandler {
   constructor(@inject("Logger") private readonly _logger: ILogger) {}
 
   public async handle(error: Error): Promise<void> {
-    this._logger.logError(error.message, error.stack);
+    this._logger.logError(`Global error: ${error.message}`, error.stack);
 
     // Run other processes below
     await this._contactAdmin();

@@ -1,12 +1,16 @@
 import { Router } from "express";
-import notificationController from "@web/controllers/notifications-controller";
+import container from "../../di-container";
+import NotificationsController from "@web/controllers/notifications-controller";
 
 const router = Router();
 
-router.post("/", notificationController.createNotification);
-router.post("/send", notificationController.sendNotification);
-router.get("/", notificationController.getNotifications);
-router.get("/:notificationId", notificationController.getNotificationById);
-router.delete("/:notificationId", notificationController.deleteNotificationById);
+// Resolve controller from DI container
+const getController = () => container.get(NotificationsController);
 
-export const notificationsRouter = router;
+router.post("/", (req, res) => getController().createNotification(req, res));
+router.post("/send", (req, res) => getController().sendNotification(req, res));
+router.get("/", (req, res) => getController().getNotifications(req, res));
+router.get("/:notificationId", (req, res) => getController().getNotificationById(req, res));
+router.delete("/:notificationId", (req, res) => getController().deleteNotificationById(req, res));
+
+export default router;

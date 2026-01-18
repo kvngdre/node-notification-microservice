@@ -4,11 +4,11 @@ import express, { json, urlencoded, type Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import { Environment } from "src/shared-kernel";
-import { apiRouter } from "./routers/api-router";
+import apiRouter from "./routers/api-router";
 import { AbstractErrorMiddleware, AbstractMiddleware } from "./abstractions/types";
 import { ILogger } from "@shared-kernel/logger-interface";
 import { IGlobalErrorHandler } from "./utils/global-error-handler";
-import container from "src/di-container";
+import container from "../di-container";
 
 /**
  * WebApp class responsible for configuring and running the Express.js server.
