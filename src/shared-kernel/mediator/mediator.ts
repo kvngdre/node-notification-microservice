@@ -39,36 +39,80 @@ export default class Mediator implements IMediator {
   }
 
   private async _discoverAndRegisterHandlers() {
+    this._logger.logDebug("Starting handler discovery...");
+
     const pattern = "**/*-handler.{ts,js}";
     const handlerFiles = sync(pattern, {
-      ignore: ["node_modules/**"]
+      ignore: ["node_modules/**", "**/*-error-handler.{ts,js}"]
     });
 
+    this._logger.logDebug(
+      `Found ${handlerFiles.length} handler files matching pattern: ${pattern}`
+    );
+
+    let registeredCount = 0;
+
     for (const file of handlerFiles) {
-      // Dynamically import the handler file
-      const filePath = path.resolve(file);
+      this._logger.logDebug(`Processing handler file: ${file}`);
 
-      const handlerModule = await import(filePath);
+      try {
+        // Dynamically import the handler file
+        const filePath = path.resolve(file);
 
-      // Iterate over the module's exports to find the handler class
-      for (const key of Object.keys(handlerModule)) {
-        const handlerClass = handlerModule[key];
+        const handlerModule = await import(filePath);
+        const exportKeys = Object.keys(handlerModule);
 
-        // Check if the handler class implements the IRequestHandler interface
-        if (this._isRequestHandler(handlerClass)) {
-          // Resolve the handler instance using DI container
-          const handlerInstance = container.get<IRequestHandler<IRequest, unknown>>(handlerClass);
+        this._logger.logDebug(
+          `Found ${exportKeys.length} exports in ${file}: [${exportKeys.join(", ")}]`
+        );
 
-          // Extract the request type from the handler (optional: based on naming convention or custom logic)
-          const requestName = this._getRequestName(handlerClass);
+        // Iterate over the module's exports to find the handler class
+        for (const key of exportKeys) {
+          const handlerClass = handlerModule[key];
 
-          // Register the handler in the _handlers map
-          this._handlers.set(requestName, handlerInstance);
+          // Check if the handler class implements the IRequestHandler interface
+          if (this._isRequestHandler(handlerClass)) {
+            try {
+              // Resolve the handler instance using DI container
+              this._logger.logDebug(`Resolving handler for class: ${handlerClass.name}`);
+              const handlerInstance = container.get<IRequestHandler<IRequest, unknown>>(
+                handlerClass.name
+              );
+              this._logger.logDebug(
+                `Resolved handler instance for ${handlerInstance.constructor.name}`
+              );
+
+              // Extract the request type from the handler (optional: based on naming convention or custom logic)
+              const requestName = this._getRequestName(handlerClass);
+              this._logger.logDebug(
+                `Associating handler ${handlerClass.name} with request: ${requestName}`
+              );
+
+              // Register the handler in the _handlers map
+              this._handlers.set(requestName, handlerInstance);
+
+              registeredCount++;
+              this._logger.logDebug(
+                `✅ Registered handler: ${handlerClass.name} for request: ${requestName}`
+              );
+            } catch (error) {
+              this._logger.logError((error as Error).message);
+              this._logger.logError(`❌ Failed to resolve handler ${handlerClass.name}:`, {
+                error
+              });
+            }
+          } else {
+            this._logger.logDebug(`⏭️ Skipping ${key}: not a request handler`);
+          }
         }
+      } catch (error) {
+        this._logger.logError(`❌ Failed to process handler file ${file}:`, error);
       }
     }
 
-    this._logger.logDebug("Request handlers registered...✅");
+    this._logger.logInfo(
+      `Request handlers registration complete. Registered ${registeredCount} handlers ✅`
+    );
   }
 
   // Helper method to check if a class implements IRequestHandler

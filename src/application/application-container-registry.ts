@@ -15,11 +15,26 @@ import {
 } from "./notifications/commands/send";
 
 export function registerApplicationServices() {
-  container.bind("CreateNotificationCommandHandler").to(CreateNotificationCommandHandler);
-  container.bind("GetNotificationByIdQueryHandler").to(GetNotificationByIdQueryHandler);
-  container.bind("GetNotificationsQueryHandler").to(GetNotificationsQueryHandler);
-  container.bind("DeleteNotificationByIdCommandHandler").to(DeleteNotificationByIdCommandHandler);
-  container.bind("SendNotificationCommandHandler").to(SendNotificationCommandHandler);
+  container
+    .bind("CreateNotificationCommandHandler")
+    .to(CreateNotificationCommandHandler)
+    .inSingletonScope();
+  container
+    .bind("GetNotificationByIdQueryHandler")
+    .to(GetNotificationByIdQueryHandler)
+    .inSingletonScope();
+  container
+    .bind("GetNotificationsQueryHandler")
+    .to(GetNotificationsQueryHandler)
+    .inSingletonScope();
+  container
+    .bind("DeleteNotificationByIdCommandHandler")
+    .to(DeleteNotificationByIdCommandHandler)
+    .inSingletonScope();
+  container
+    .bind("SendNotificationCommandHandler")
+    .to(SendNotificationCommandHandler)
+    .inSingletonScope();
 
   container
     .bind("CreateNotificationCommandValidator")
