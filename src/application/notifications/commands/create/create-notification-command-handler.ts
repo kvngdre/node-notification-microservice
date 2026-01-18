@@ -1,46 +1,39 @@
-import { inject, Lifecycle, scoped } from "tsyringe";
-import { CreateNotificationCommand } from "./create-notification-command";
-import { NotificationResponse } from "@application/notifications/notification-response";
-import { Result, ResultType, AbstractValidator } from "@shared-kernel/index";
-import {
-  INotificationRepository,
-  Notification,
-  NotificationChannel,
-  // NotificationExceptions,
-  NotificationStatus
-} from "@domain/notifications";
-import { IRequestHandler } from "@infrastructure/mediator";
+import { inject, injectable } from "inversify";
+import { CreateNotificationCommand } from "./create-notification-command.js";
+import { NotificationResponseDTO } from "@application/notifications/shared/notification-response-dto.js";
+import { Result, ResultType } from "@shared-kernel/index.js";
+import { INotificationRepository, Notification } from "@domain/notification/index.js";
+import { IRequestHandler } from "@application/abstractions/messaging/request-handler-interface.js";
+import { CreateNotificationCommandValidator } from "./create-notification-command-validator.js";
 
-@scoped(Lifecycle.ResolutionScoped)
-export class CreateNotificationCommandHandler
-  implements IRequestHandler<CreateNotificationCommand, NotificationResponse>
-{
+@injectable()
+export class CreateNotificationCommandHandler implements IRequestHandler<
+  CreateNotificationCommand,
+  NotificationResponseDTO
+> {
   constructor(
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository,
-    @inject("CreateNotificationCommandValidator")
-    private readonly _createNotificationCommandValidator: AbstractValidator<CreateNotificationCommand>
+    @inject(CreateNotificationCommandValidator)
+    private readonly _validator: CreateNotificationCommandValidator
   ) {}
 
   public async handle(
     command: CreateNotificationCommand
-  ): Promise<ResultType<NotificationResponse>> {
-    const { isFailure, exception, value } =
-      this._createNotificationCommandValidator.validate(command);
+  ): Promise<ResultType<NotificationResponseDTO>> {
+    const { isFailure, exception, value } = this._validator.validate(command);
 
-    if (isFailure) {
-      return Result.failure(exception);
-    }
+    if (isFailure) return Result.failure(exception);
 
     const notification = new Notification(
-      value.channel as NotificationChannel,
+      value.channel,
       value.data,
-      value.status as NotificationStatus,
+      value.status,
       value.retryCount
     );
 
     await this._notificationRepository.save(notification);
 
-    return Result.success("Notification created", NotificationResponse.from(notification));
+    return Result.success("Notification created", NotificationResponseDTO.from(notification));
   }
 }

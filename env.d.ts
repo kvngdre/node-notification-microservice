@@ -11,6 +11,7 @@ declare global {
       RMQ_MAIN_QUEUE_NAME: string;
       RMQ_DLQ_ROUTING_KEY: string;
       RMQ_DLQ_NAME: string;
+      RETRY_LIMIT: string;
     }
   }
 }

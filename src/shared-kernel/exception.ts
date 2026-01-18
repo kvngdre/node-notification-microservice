@@ -1,4 +1,4 @@
-import { ExceptionType } from "./exception-type";
+import { ExceptionType } from "./exception-type.js";
 
 export class Exception {
   constructor(
@@ -11,7 +11,7 @@ export class Exception {
     return new Exception(ExceptionType.Conflict, code, description);
   }
 
-  public static Failure(code: string, description: string, statusCode?: number) {
+  public static Failure(code: string, description: string) {
     return new Exception(ExceptionType.Failure, code, description);
   }
 

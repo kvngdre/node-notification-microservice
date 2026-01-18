@@ -1,0 +1,63 @@
+import { inject, injectable } from "inversify";
+import { DataSource } from "typeorm";
+import { Notification } from "@domain/notification/notification-entity.js";
+import { Environment, ILogger } from "@shared-kernel/index.js";
+
+@injectable()
+export default class DatabaseContext {
+  private readonly _dataSource: DataSource;
+  private _connection: DataSource;
+
+  constructor(@inject("Logger") private readonly _logger: ILogger) {
+    const connectionURI = process.env.DB_URI;
+    if (!connectionURI) {
+      throw new Error("No database connection URI provided");
+    }
+
+    this._dataSource = new DataSource({
+      type: "postgres",
+      url: connectionURI,
+      connectTimeoutMS: Environment.isDevelopment ? 10_000 : 60_000,
+      entities: Environment.isDevelopment
+        ? ["src/domain/**/*-entity.ts"]
+        : ["dist/domain/**/*-entity.js"],
+      migrations: Environment.isDevelopment
+        ? ["src/infrastructure/database/migrations/*.ts"]
+        : ["dist/infrastructure/database/migrations/*.js"],
+      synchronize: Environment.isDevelopment,
+      logging: Environment.isDevelopment ? ["query", "error"] : ["error"]
+    });
+  }
+
+  public async connect(): Promise<void> {
+    try {
+      this._connection = await this._dataSource.initialize();
+
+      if (this._connection.isInitialized) {
+        if (Environment.isProduction) {
+          console.log("Connected to database");
+        } else {
+          this._logger.logInfo("Connected to database");
+        }
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to connect to the database. Reason-> ${error.message}`);
+      }
+    }
+  }
+
+  public async disconnect(): Promise<void> {
+    try {
+      await this._connection.destroy();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to disconnect from database. Reason-> ${error.message}`);
+      }
+    }
+  }
+
+  public get notifications() {
+    return this._connection.getRepository(Notification);
+  }
+}

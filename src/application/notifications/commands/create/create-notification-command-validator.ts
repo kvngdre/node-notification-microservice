@@ -1,23 +1,20 @@
-import { Lifecycle, scoped } from "tsyringe";
+import { injectable } from "inversify";
 import { z } from "zod";
-import { AbstractValidator, ValidationResultType } from "@shared-kernel/abstract-validator";
-import { CreateNotificationCommand } from "./create-notification-command";
-import { NotificationChannel, NotificationStatus } from "@domain/notifications";
+import { AbstractValidator } from "@shared-kernel/abstract-validator.js";
+import { CreateNotificationCommand } from "./create-notification-command.js";
+import { NotificationChannel, NotificationStatus } from "@domain/notification/types/index.js";
 
-@scoped(Lifecycle.ResolutionScoped)
+@injectable()
 export class CreateNotificationCommandValidator extends AbstractValidator<CreateNotificationCommand> {
-  public validate(
-    request: CreateNotificationCommand
-  ): ValidationResultType<CreateNotificationCommand> {
-    const schema = z.object({
-      channel: z.nativeEnum(NotificationChannel),
-      data: z.string().trim().min(1).max(1086),
-      retryCount: z.number().min(0).max(3).optional(),
-      status: z.nativeEnum(NotificationStatus).optional()
-    });
+  private readonly schema = z.object({
+    channel: z.nativeEnum(NotificationChannel),
+    data: z.string().trim().min(1).max(1086),
+    retryCount: z.number().min(0).max(3).optional(),
+    status: z.nativeEnum(NotificationStatus).optional()
+  });
 
-    const result = schema.safeParse(request);
-
+  public validate(request: CreateNotificationCommand) {
+    const result = this.schema.safeParse(request);
     return this.mapToValidationResult(result);
   }
 }

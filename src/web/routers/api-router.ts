@@ -1,5 +1,5 @@
 import { type Request, type Response, Router } from "express";
-import { notificationsRouter } from "./notifications-router";
+import notificationsRouter from "./notifications-router.js";
 
 export const router = Router();
 
@@ -9,4 +9,4 @@ router.all("/health", (req: Request, res: Response) => {
 
 router.use("/notifications", notificationsRouter);
 
-export const apiRouter = router;
+export default router;

@@ -1,11 +1,10 @@
+import { inject, injectable } from "inversify";
 import { Channel, connect, Connection } from "amqplib";
-import { singleton } from "tsyringe";
-import { IPublisher } from "@application/abstractions/publisher";
-import { Notification } from "@domain/notifications";
-import { Logger } from "@infrastructure/logging";
-import { Environment } from "@shared-kernel/environment";
+import { IPublisher } from "@application/abstractions/publisher/publisher-interface.js";
+import { Notification } from "@domain/notification/notification-entity.js";
+import { Environment, ILogger } from "@shared-kernel/index.js";
 
-@singleton()
+@injectable()
 export class NotificationPublisher implements IPublisher<Notification> {
   private readonly _exchangeName = process.env.RMQ_EXCHANGE_NAME || "notification_events";
   private readonly _exchangeType = process.env.RMQ_EXCHANGE_TYPE || "direct";
@@ -13,10 +12,10 @@ export class NotificationPublisher implements IPublisher<Notification> {
   private readonly _queue = process.env.RMQ_MAIN_QUEUE_NAME || "send_notification_queue";
   private readonly _dlqRoutingKey = process.env.RMQ_DLQ_ROUTING_KEY || "failed_notification";
   private readonly _rmqHostname = process.env.RMQ_HOST || "localhost";
-  private readonly _rmqPort = process.env.RMQ_PORT || 5672;
+  private readonly _rmqPort = parseInt(process.env.RMQ_PORT) || 5672;
   private _connection: Connection | null = null;
 
-  constructor(private readonly _logger: Logger) {}
+  constructor(@inject("Logger") private readonly _logger: ILogger) {}
 
   public async publish(data: Notification): Promise<void> {
     try {
@@ -27,7 +26,6 @@ export class NotificationPublisher implements IPublisher<Notification> {
       await this._assertExchangeAndQueue(channel);
 
       this._logger.logDebug("Publishing message...");
-
       channel.publish(this._exchangeName, this._routingKey, this._serializeData(data), {
         persistent: Environment.isProduction
       });
@@ -46,7 +44,7 @@ export class NotificationPublisher implements IPublisher<Notification> {
     if (this._connection === null) {
       this._connection = await connect({
         hostname: this._rmqHostname,
-        port: Number(this._rmqPort) ?? 5672,
+        port: this._rmqPort,
         username: "guest",
         password: "guest"
       });
