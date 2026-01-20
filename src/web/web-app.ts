@@ -30,7 +30,7 @@ export default class WebApp {
    * Resolves all required middleware and services from the DI container.
    * @param options - Server configuration options including port
    */
-  constructor(options: IWebAppOptions) {
+  constructor(options?: IWebAppOptions) {
     try {
       // Resolve middleware dependencies from DI container
       this._requestLoggingMiddleware = container.get("RequestLoggingMiddleware");
@@ -41,7 +41,7 @@ export default class WebApp {
       throw new Error(`DI container resolution failed: ${error}`);
     }
 
-    this.setOptions(options);
+    if (options) this.setOptions(options);
   }
 
   /**
@@ -69,7 +69,7 @@ export default class WebApp {
   public run(): void {
     try {
       // Security middleware
-      this._app.use(cors());
+      this._app.use(cors(this._options.cors || {}));
       this._app.use(helmet());
 
       // Body parsing middleware

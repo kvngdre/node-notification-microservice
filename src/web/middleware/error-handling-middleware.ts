@@ -13,7 +13,7 @@ export class ErrorHandlingMiddleware extends AbstractErrorMiddleware {
     super();
   }
 
-  public async execute(err: Error, req: Request, res: Response, next: NextFunction): Promise<void> {
+  public async execute(err: Error, _: Request, res: Response, next: NextFunction): Promise<void> {
     // Handle JSON syntax errors in payload.
     if (err instanceof SyntaxError && "body" in err) {
       const exception = new ValidationException(
