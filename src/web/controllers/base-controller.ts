@@ -5,17 +5,22 @@ import { HttpStatus } from "@web/utils/http-status.js";
 
 export abstract class BaseController {
   protected buildHttpResponse<TValue>(result: ResultType<TValue>, res: Response) {
-    const code = result.isSuccess
-      ? HttpStatus.OK
-      : HttpStatus.mapExceptionToHttpStatus(result.exception);
+    if (result.isSuccess) {
+      const code = HttpStatus.OK;
+      const payload = ApiResponse.success<TValue>(result.message, result.value);
 
-    const payload = result.isSuccess
-      ? ApiResponse.success<TValue>(result.message, result.value)
-      : ApiResponse.failure(result.exception, res);
+      return {
+        code,
+        payload
+      } as const;
+    }
+
+    const code = HttpStatus.mapExceptionToHttpStatus(result.exception);
+    const payload = ApiResponse.failure(result.exception, res);
 
     return {
       code,
       payload
-    };
+    } as const;
   }
 }

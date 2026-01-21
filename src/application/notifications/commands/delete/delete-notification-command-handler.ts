@@ -5,22 +5,19 @@ import { INotificationRepository, NotificationExceptions } from "@domain/notific
 import { IRequestHandler } from "@application/abstractions/messaging/request-handler-interface.js";
 
 @injectable()
-export class DeleteNotificationCommandHandler implements IRequestHandler<
-  DeleteNotificationCommand,
-  void
-> {
+export class DeleteNotificationCommandHandler implements IRequestHandler<DeleteNotificationCommand> {
   constructor(
     @inject("NotificationRepository")
     private readonly _notificationRepository: INotificationRepository
   ) {}
 
-  public async handle(command: DeleteNotificationCommand): Promise<ResultType<void>> {
+  public async handle(command: DeleteNotificationCommand): Promise<ResultType> {
     const notification = await this._notificationRepository.findById(command.notificationId);
 
     if (!notification) return Result.failure(NotificationExceptions.NotFound);
 
     await this._notificationRepository.remove(notification);
 
-    return Result.success<void>("Notification deleted");
+    return Result.success("Notification deleted");
   }
 }

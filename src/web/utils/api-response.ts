@@ -26,7 +26,7 @@ export class ApiResponse<TData, TSuccess extends boolean> {
    * @param data - The data to include in the payload.
    * @returns An instance of ApiResponse with success status.
    */
-  public static success<T>(message: string, data: T | undefined, status: number = 200) {
+  public static success<T>(message: string, data: T, status: number = 200) {
     return new ApiResponse(true, status, message, data, undefined as never);
   }
 

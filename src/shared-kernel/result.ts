@@ -4,7 +4,7 @@ export class Result<TValue> {
   private constructor(
     private readonly _isSuccess: boolean,
     private readonly _message?: string,
-    private readonly _value?: TValue,
+    private readonly _value: TValue | null = null,
     private readonly _exception?: Exception
   ) {}
 
@@ -40,8 +40,8 @@ export class Result<TValue> {
     return this._exception;
   }
 
-  public static success<TValue = undefined>(message: string, value?: TValue) {
-    return new Result(true, message, value) as unknown as ISuccessResult<TValue>;
+  public static success<T = null>(message: string, value?: T) {
+    return new Result(true, message, value) as unknown as ISuccessResult<T>;
   }
 
   public static failure(exception: Exception) {
@@ -49,16 +49,13 @@ export class Result<TValue> {
   }
 }
 
-// const res = new Result(true, "", undefined, undefined as never);
-// const res = Result.success("", 2);
-
-export type ResultType<TValue = unknown> = ISuccessResult<TValue> | IFailureResult;
+export type ResultType<TValue = null> = ISuccessResult<TValue> | IFailureResult;
 
 interface ISuccessResult<TValue> {
   get isSuccess(): true;
   get isFailure(): false;
   get message(): string;
-  get value(): TValue | never;
+  get value(): TValue;
   get exception(): never;
 }
 
